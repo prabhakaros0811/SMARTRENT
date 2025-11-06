@@ -1,0 +1,116 @@
+import Image from 'next/image';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Home, Bed, Bath, IndianRupee, Calendar, FileText } from 'lucide-react';
+import { getPropertyForTenant, mockRentPayments, mockBills } from '@/lib/data';
+import { formatCurrency, formatDate } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
+
+export default function TenantDashboard() {
+  const tenantId = 'tenant-1'; // Mock logged-in tenant
+  const property = getPropertyForTenant(tenantId);
+  const recentRent = mockRentPayments.filter(p => p.tenantId === tenantId).sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0];
+  const recentBill = mockBills.filter(b => b.tenantId === tenantId).sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0];
+
+
+  if (!property) {
+    return <div>No property assigned.</div>;
+  }
+
+  return (
+    <div className="grid gap-6 lg:grid-cols-3">
+      <div className="lg:col-span-2">
+        <Card className="overflow-hidden">
+          <div className="relative h-64 w-full">
+            <Image
+              src={property.imageUrl}
+              alt={property.title}
+              fill
+              className="object-cover"
+              data-ai-hint="apartment interior"
+            />
+          </div>
+          <CardHeader>
+            <CardTitle className="text-3xl font-headline">{property.title}</CardTitle>
+            <CardDescription className="flex items-center gap-2">
+              <Home className="h-4 w-4" />
+              {property.address}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
+                <IndianRupee className="h-6 w-6 text-primary mb-1" />
+                <span className="text-sm text-muted-foreground">Rent</span>
+                <span className="font-bold text-lg">{formatCurrency(property.rent)}</span>
+            </div>
+             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
+                <Bed className="h-6 w-6 text-primary mb-1" />
+                <span className="text-sm text-muted-foreground">Bedrooms</span>
+                <span className="font-bold text-lg">{property.bedrooms}</span>
+            </div>
+             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
+                <Bath className="h-6 w-6 text-primary mb-1" />
+                <span className="text-sm text-muted-foreground">Bathrooms</span>
+                <span className="font-bold text-lg">{property.bathrooms}</span>
+            </div>
+            <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
+                <FileText className="h-6 w-6 text-primary mb-1" />
+                <span className="text-sm text-muted-foreground">Area</span>
+                <span className="font-bold text-lg">{property.squareFootage} sqft</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+            <CardDescription>Your latest payment statuses.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {recentRent && (
+              <div>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-semibold">Rent - {recentRent.month} {recentRent.year}</p>
+                    <p className="text-sm text-muted-foreground flex items-center gap-1">
+                      <Calendar className="h-3 w-3" /> Due by {formatDate(recentRent.dueDate)}
+                    </p>
+                  </div>
+                  <Badge variant={recentRent.status === 'Paid' ? 'secondary' : 'destructive'}>
+                    {recentRent.status}
+                  </Badge>
+                </div>
+                <p className="text-right font-bold mt-1">{formatCurrency(recentRent.amount)}</p>
+              </div>
+            )}
+            <Separator />
+            {recentBill && (
+                <div>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-semibold">{recentBill.type} Bill - {recentBill.month}</p>
+                     <p className="text-sm text-muted-foreground flex items-center gap-1">
+                      <Calendar className="h-3 w-3" /> Due by {formatDate(recentBill.dueDate)}
+                    </p>
+                  </div>
+                  <Badge variant={recentBill.status === 'Paid' ? 'secondary' : 'destructive'}>
+                    {recentBill.status}
+                  </Badge>
+                </div>
+                 <p className="text-right font-bold mt-1">{formatCurrency(recentBill.amount)}</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
