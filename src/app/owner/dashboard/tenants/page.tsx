@@ -25,7 +25,6 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
@@ -34,18 +33,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { mockTenants, mockProperties } from '@/lib/data';
 import type { Tenant, User } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { PlusCircle, Trash2, Copy } from 'lucide-react';
-
-// A simple password generator
-const generatePassword = () => {
-    const length = 8;
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let retVal = "";
-    for (let i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
-    }
-    return retVal;
-};
+import { PlusCircle, Trash2 } from 'lucide-react';
 
 
 export default function OwnerTenantsPage() {
@@ -53,16 +41,15 @@ export default function OwnerTenantsPage() {
     const [tenants, setTenants] = useState<(Tenant & User)[]>(mockTenants);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     
-    // State for the new tenant info dialog
-    const [newTenantInfo, setNewTenantInfo] = useState<{id: string, password: string} | null>(null);
-
     // Form state
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [propertyId, setPropertyId] = useState('');
+    const [userId, setUserId] = useState('');
+    const [password, setPassword] = useState('');
   
     const handleAddTenant = () => {
-      if (!name || !email || !propertyId) {
+      if (!name || !email || !propertyId || !userId || !password) {
         toast({
             variant: "destructive",
             title: "Error",
@@ -70,18 +57,25 @@ export default function OwnerTenantsPage() {
         });
         return;
       }
+
+      if (mockTenants.some(t => t.id === userId)) {
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "A tenant with this User ID already exists.",
+        });
+        return;
+      }
       
-      const newTenantId = `tenant-${Date.now()}`;
-      const newPassword = generatePassword();
       const newTenant: Tenant & User = {
-        id: newTenantId,
+        id: userId,
         name,
         email,
         propertyId,
         ownerId: 'owner-1', // Assuming single owner
         role: 'tenant',
-        avatar: `https://i.pravatar.cc/150?u=${newTenantId}`,
-        password: newPassword,
+        avatar: `https://i.pravatar.cc/150?u=${userId}`,
+        password: password,
       };
       
       mockTenants.push(newTenant);
@@ -91,10 +85,9 @@ export default function OwnerTenantsPage() {
       setName('');
       setEmail('');
       setPropertyId('');
+      setUserId('');
+      setPassword('');
       setIsAddDialogOpen(false);
-      
-      // Show new tenant credentials
-      setNewTenantInfo({ id: newTenantId, password: newPassword });
 
       toast({
         title: 'Tenant Added Successfully!',
@@ -116,14 +109,6 @@ export default function OwnerTenantsPage() {
             });
         }
     };
-
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text);
-        toast({
-            title: 'Copied!',
-            description: 'Credentials copied to clipboard.'
-        });
-    }
   
 
   return (
@@ -147,7 +132,7 @@ export default function OwnerTenantsPage() {
             <DialogHeader>
               <DialogTitle>Add New Tenant</DialogTitle>
               <DialogDescription>
-                Fill in the details to add a new tenant. A unique User ID and password will be generated for them.
+                Fill in the details to add a new tenant and assign them credentials.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -178,9 +163,21 @@ export default function OwnerTenantsPage() {
                     </SelectContent>
                 </Select>
               </div>
+               <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="userId" className="text-right">
+                  User ID
+                </Label>
+                <Input id="userId" value={userId} onChange={(e) => setUserId(e.target.value)} className="col-span-3" />
+              </div>
+               <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="password" className="text-right">
+                  Password
+                </Label>
+                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="col-span-3" />
+              </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleAddTenant}>Generate Credentials</Button>
+              <Button onClick={handleAddTenant}>Add Tenant</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -232,47 +229,6 @@ export default function OwnerTenantsPage() {
         </Table>
       </CardContent>
     </Card>
-
-    <Dialog open={!!newTenantInfo} onOpenChange={() => setNewTenantInfo(null)}>
-        <DialogContent>
-            <DialogHeader>
-                <DialogTitle>Tenant Credentials</DialogTitle>
-                <DialogDescription>
-                    Please copy and share these credentials with the new tenant.
-                </DialogDescription>
-            </DialogHeader>
-            {newTenantInfo && (
-                <Alert>
-                    <AlertTitle>Login Details</AlertTitle>
-                    <AlertDescription>
-                        <div className="space-y-2 mt-2">
-                           <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm text-muted-foreground">User ID</p>
-                                    <code className="font-mono">{newTenantInfo.id}</code>
-                                </div>
-                                <Button variant="outline" size="icon" onClick={() => copyToClipboard(newTenantInfo.id)}>
-                                    <Copy className="h-4 w-4" />
-                                </Button>
-                           </div>
-                           <div className="flex items-center justify-between">
-                               <div>
-                                    <p className="text-sm text-muted-foreground">Password</p>
-                                    <code className="font-mono">{newTenantInfo.password}</code>
-                               </div>
-                                <Button variant="outline" size="icon" onClick={() => copyToClipboard(newTenantInfo.password)}>
-                                    <Copy className="h-4 w-4" />
-                                </Button>
-                           </div>
-                        </div>
-                    </AlertDescription>
-                </Alert>
-            )}
-             <DialogFooter>
-                <Button onClick={() => setNewTenantInfo(null)}>Close</Button>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
     </>
   );
 }
