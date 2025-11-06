@@ -6,6 +6,7 @@ export const mockOwner: User = {
   email: 'rajesh.kumar@example.com',
   role: 'owner',
   avatar: 'https://i.pravatar.cc/150?u=owner1',
+  password: 'password',
 };
 
 export const mockProperties: Property[] = [
@@ -58,7 +59,8 @@ export const mockTenants: (Tenant & User)[] = [
     propertyId: 'prop-1',
     ownerId: 'owner-1',
     role: 'tenant',
-    avatar: 'https://i.pravatar.cc/150?u=tenant1'
+    avatar: 'https://i.pravatar.cc/150?u=tenant1',
+    password: 'password',
   },
   {
     id: 'tenant-2',
@@ -67,7 +69,8 @@ export const mockTenants: (Tenant & User)[] = [
     propertyId: 'prop-2',
     ownerId: 'owner-1',
     role: 'tenant',
-    avatar: 'https://i.pravatar.cc/150?u=tenant2'
+    avatar: 'https://i.pravatar.cc/150?u=tenant2',
+    password: 'password',
   },
 ];
 

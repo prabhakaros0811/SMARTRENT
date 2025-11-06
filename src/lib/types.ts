@@ -4,6 +4,7 @@ export interface User {
   email: string;
   role: 'owner' | 'tenant';
   avatar: string;
+  password?: string;
 }
 
 export interface Property {
@@ -26,6 +27,7 @@ export interface Tenant {
   email: string;
   propertyId: string;
   ownerId: string;
+  password?: string;
 }
 
 export interface RentPayment {
