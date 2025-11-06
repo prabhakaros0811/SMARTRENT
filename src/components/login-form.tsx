@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, LoaderCircle } from 'lucide-react';
-import { mockTenants } from '@/lib/data';
+import { mockTenants, mockOwner, mockOwners } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 
 import { Button } from '@/components/ui/button';
@@ -41,14 +41,15 @@ export function LoginForm({ userType }: LoginFormProps) {
     setTimeout(() => {
       let isAuthenticated = false;
       if (userType === 'owner') {
-        isAuthenticated =
-          username === 'owner@emall.com' && password === 'password';
+        const owner = mockOwners.find(o => o.email === username && o.password === password);
+        isAuthenticated = !!owner;
+        if(owner) {
+           localStorage.setItem('loggedInOwnerId', owner.id);
+        }
       } else {
         const tenant = mockTenants.find(t => t.id === username);
         isAuthenticated = !!tenant && tenant.password === password;
         if (tenant && isAuthenticated) {
-          // In a real app, you would manage session state.
-          // For this mock, we'll store it in localStorage.
           localStorage.setItem('loggedInTenantId', tenant.id);
         }
       }
@@ -120,6 +121,16 @@ export function LoginForm({ userType }: LoginFormProps) {
             >
               {isLoading ? <LoaderCircle className="animate-spin" /> : 'Login'}
             </Button>
+
+            {userType === 'owner' && (
+               <p className="text-sm text-center text-muted-foreground">
+                 Don&apos;t have an account?{' '}
+                 <Link href="/owner/signup" className="underline hover:text-primary">
+                    Sign Up
+                 </Link>
+               </p>
+            )}
+
             <Link
               href="/"
               className="text-sm text-muted-foreground hover:text-primary"

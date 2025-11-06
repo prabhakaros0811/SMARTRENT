@@ -9,6 +9,17 @@ export const mockOwner: User = {
   password: 'password',
 };
 
+export const mockOwners: User[] = [
+    {
+      id: 'owner-1',
+      name: 'Rajesh Kumar',
+      email: 'owner@emall.com',
+      role: 'owner',
+      avatar: 'https://i.pravatar.cc/150?u=owner1',
+      password: 'password',
+    },
+]
+
 export let mockProperties: Property[] = [
   {
     id: 'prop-1',
