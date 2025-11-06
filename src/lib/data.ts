@@ -9,7 +9,7 @@ export const mockOwner: User = {
   password: 'password',
 };
 
-export const mockProperties: Property[] = [
+export let mockProperties: Property[] = [
   {
     id: 'prop-1',
     ownerId: 'owner-1',
@@ -51,7 +51,7 @@ export const mockProperties: Property[] = [
   },
 ];
 
-export const mockTenants: (Tenant & User)[] = [
+export let mockTenants: (Tenant & User)[] = [
   {
     id: 'tenant-1',
     name: 'Priya Sharma',
@@ -78,7 +78,7 @@ export const mockRentPayments: RentPayment[] = [
   { id: 'rent-1', propertyId: 'prop-1', tenantId: 'tenant-1', month: 'July', year: 2024, amount: 25000, status: 'Paid', dueDate: '2024-07-05', paymentDate: '2024-07-03' },
   { id: 'rent-2', propertyId: 'prop-1', tenantId: 'tenant-1', month: 'August', year: 2024, amount: 25000, status: 'Pending', dueDate: '2024-08-05' },
   { id: 'rent-3', propertyId: 'prop-2', tenantId: 'tenant-2', month: 'July', year: 2024, amount: 45000, status: 'Paid', dueDate: '2024-07-10', paymentDate: '2024-07-08' },
-  { id: 'rent-4', propertyId: 'prop-2', tenantId: 'tenant-2', month: 'August', year: 2024, amount: 45000, status: 'Pending', dueDate: '2024-08-10' },
+  { id: 'rent-4', propertyId: 'prop-2', tenantId: 'tenant-2', month: 'August', year: 2024, amount: 45000, status: 'Pending', dueDate: '2024-8-10' },
   { id: 'rent-5', propertyId: 'prop-1', tenantId: 'tenant-1', month: 'June', year: 2024, amount: 25000, status: 'Paid', dueDate: '2024-06-05', paymentDate: '2024-06-01' },
 ];
 
