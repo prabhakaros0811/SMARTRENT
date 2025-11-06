@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { LoaderCircle, Sparkles } from "lucide-react";
 
 import { getRentPrediction, type State } from "@/lib/actions";
@@ -40,7 +41,7 @@ function SubmitButton() {
 
 export function RentPredictionForm() {
   const initialState: State = { message: null, errors: {} };
-  const [state, dispatch] = useFormState(getRentPrediction, initialState);
+  const [state, dispatch] = useActionState(getRentPrediction, initialState);
 
   return (
     <form action={dispatch} className="space-y-6">
