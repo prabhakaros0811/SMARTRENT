@@ -1,3 +1,6 @@
+'use client';
+
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -17,11 +20,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { mockRentPayments, mockBills } from '@/lib/data';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { LoaderCircle } from 'lucide-react';
 
 export default function PaymentHistoryPage() {
-  const tenantId = 'tenant-1'; // Mock logged-in tenant
-  const rentHistory = mockRentPayments.filter(p => p.tenantId === tenantId);
-  const billHistory = mockBills.filter(b => b.tenantId === tenantId);
+  const [tenantId, setTenantId] = React.useState<string | null>(null);
+  
+  React.useEffect(() => {
+    const loggedInTenantId = localStorage.getItem('loggedInTenantId');
+    setTenantId(loggedInTenantId || 'tenant-1');
+  }, []);
+
+  const rentHistory = tenantId ? mockRentPayments.filter(p => p.tenantId === tenantId) : [];
+  const billHistory = tenantId ? mockBills.filter(b => b.tenantId === tenantId) : [];
+
+  if (!tenantId) {
+    return <div className="flex justify-center items-center h-full"><LoaderCircle className="h-8 w-8 animate-spin" /></div>;
+  }
 
   return (
     <Card>

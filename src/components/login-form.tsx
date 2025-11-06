@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, LoaderCircle } from "lucide-react";
+import { mockTenants } from "@/lib/data";
+import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,14 +26,41 @@ interface LoginFormProps {
 
 export function LoginForm({ userType }: LoginFormProps) {
   const router = useRouter();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState(userType === 'owner' ? 'owner@emall.com' : '');
+  const [password, setPassword] = useState('password');
+
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
     // Mock authentication
     setTimeout(() => {
-      router.push(`/${userType}/dashboard`);
+      let isAuthenticated = false;
+      if (userType === 'owner') {
+        isAuthenticated = username === 'owner@emall.com' && password === 'password';
+      } else {
+        const tenant = mockTenants.find(t => t.id === username);
+        isAuthenticated = !!tenant && password === 'password';
+        if (tenant) {
+            // In a real app, you would manage session state.
+            // For this mock, we'll store it in localStorage.
+            localStorage.setItem('loggedInTenantId', tenant.id);
+        }
+      }
+
+      if (isAuthenticated) {
+        router.push(`/${userType}/dashboard`);
+      } else {
+        toast({
+            variant: "destructive",
+            title: "Login Failed",
+            description: "Invalid username or password.",
+        });
+        setIsLoading(false);
+      }
     }, 1000);
   };
 
@@ -42,6 +71,8 @@ export function LoginForm({ userType }: LoginFormProps) {
       : "Login to view your rental information.";
   const Icon = userType === "owner" ? Icons.owner : Icons.tenant;
   const buttonVariant = userType === "owner" ? "default" : "accent";
+  const usernameLabel = userType === "owner" ? "Email" : "User ID";
+  const usernamePlaceholder = userType === "owner" ? "user@example.com" : "e.g., tenant-12345";
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
@@ -56,22 +87,28 @@ export function LoginForm({ userType }: LoginFormProps) {
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="email">Username</Label>
+              <Label htmlFor="username">{usernameLabel}</Label>
               <Input
-                id="email"
+                id="username"
                 type="text"
-                placeholder="user@example.com"
+                placeholder={usernamePlaceholder}
                 required
-                defaultValue={userType === 'owner' ? 'owner@emall.com' : 'tenant@emall.com'}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" required defaultValue="password" />
+              <Input 
+                id="password" 
+                type="password" 
+                required value={password} 
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button className="w-full" variant={userType === 'owner' ? 'default' : 'accent'} type="submit" disabled={isLoading}>
+            <Button className="w-full" variant={buttonVariant} type="submit" disabled={isLoading}>
               {isLoading ? (
                 <LoaderCircle className="animate-spin" />
               ) : (

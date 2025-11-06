@@ -1,3 +1,6 @@
+'use client';
+
+import React from 'react';
 import Image from 'next/image';
 import {
   Card,
@@ -7,20 +10,34 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Home, Bed, Bath, IndianRupee, Calendar, FileText } from 'lucide-react';
+import { Home, Bed, Bath, IndianRupee, Calendar, FileText, LoaderCircle } from 'lucide-react';
 import { getPropertyForTenant, mockRentPayments, mockBills } from '@/lib/data';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
+import type { Property } from '@/lib/types';
 
 export default function TenantDashboard() {
-  const tenantId = 'tenant-1'; // Mock logged-in tenant
-  const property = getPropertyForTenant(tenantId);
-  const recentRent = mockRentPayments.filter(p => p.tenantId === tenantId).sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0];
-  const recentBill = mockBills.filter(b => b.tenantId === tenantId).sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0];
+  const [tenantId, setTenantId] = React.useState<string | null>(null);
+  const [property, setProperty] = React.useState<Property | undefined>(undefined);
+  
+  React.useEffect(() => {
+    const loggedInTenantId = localStorage.getItem('loggedInTenantId');
+    if (loggedInTenantId) {
+      setTenantId(loggedInTenantId);
+      const prop = getPropertyForTenant(loggedInTenantId);
+      setProperty(prop);
+    } else {
+        // Fallback for initial render or if not logged in
+        setTenantId('tenant-1');
+        setProperty(getPropertyForTenant('tenant-1'));
+    }
+  }, []);
 
+  const recentRent = tenantId ? mockRentPayments.filter(p => p.tenantId === tenantId).sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0] : null;
+  const recentBill = tenantId ? mockBills.filter(b => b.tenantId === tenantId).sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0] : null;
 
-  if (!property) {
-    return <div>No property assigned.</div>;
+  if (!tenantId || !property) {
+    return <div className="flex justify-center items-center h-full"><LoaderCircle className="h-8 w-8 animate-spin" /></div>;
   }
 
   return (

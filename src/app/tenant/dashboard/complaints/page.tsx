@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { mockComplaints } from '@/lib/data';
+import { mockComplaints, getPropertyForTenant } from '@/lib/data';
 import { formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Send, LoaderCircle } from 'lucide-react';
@@ -36,14 +36,24 @@ import type { Complaint } from '@/lib/types';
 
 export default function ComplaintsPage() {
   const { toast } = useToast();
-  const tenantId = 'tenant-1'; // Mock logged-in tenant
-  const propertyId = 'prop-1'; // Mock property for the tenant
+  const [tenantId, setTenantId] = useState<string | null>(null);
 
-  // Local state for complaints to re-render the list on submission
-  const [complaints, setComplaints] = useState<Complaint[]>(
-    mockComplaints.filter(c => c.tenantId === tenantId)
-  );
+  useEffect(() => {
+    const loggedInTenantId = localStorage.getItem('loggedInTenantId');
+    setTenantId(loggedInTenantId || 'tenant-1');
+  }, []);
   
+  const property = tenantId ? getPropertyForTenant(tenantId) : null;
+  const propertyId = property?.id;
+
+  const [complaints, setComplaints] = useState<Complaint[]>([]);
+  
+  useEffect(() => {
+    if(tenantId) {
+      setComplaints(mockComplaints.filter(c => c.tenantId === tenantId))
+    }
+  }, [tenantId]);
+
   const [category, setCategory] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,10 +68,17 @@ export default function ComplaintsPage() {
       });
       return;
     }
+    if (!tenantId || !propertyId) {
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Could not identify tenant or property. Please log in again.',
+        });
+        return;
+    }
 
     setIsSubmitting(true);
     
-    // Simulate API call
     setTimeout(() => {
       const newComplaint: Complaint = {
         id: `comp-${Date.now()}`,
@@ -73,13 +90,10 @@ export default function ComplaintsPage() {
         date: new Date().toISOString(),
       };
 
-      // Add to the beginning of the mock data array
       mockComplaints.unshift(newComplaint); 
 
-      // Update local state to re-render the list
       setComplaints(prev => [newComplaint, ...prev]);
 
-      // Reset form
       setCategory('');
       setMessage('');
       setIsSubmitting(false);

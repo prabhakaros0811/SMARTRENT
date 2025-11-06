@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   Home,
@@ -19,14 +21,22 @@ import {
 import { UserNav } from '@/components/user-nav';
 import { Icons } from '@/components/icons';
 import { mockTenants } from '@/lib/data';
+import React from 'react';
 
 export default function TenantDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-    // Let's assume tenant with id 'tenant-1' is logged in
-    const currentUser = mockTenants.find(t => t.id === 'tenant-1')!;
+    const [currentUser, setCurrentUser] = React.useState(mockTenants[0]);
+
+    React.useEffect(() => {
+        const loggedInTenantId = localStorage.getItem('loggedInTenantId');
+        const tenant = mockTenants.find(t => t.id === loggedInTenantId);
+        if (tenant) {
+            setCurrentUser(tenant);
+        }
+    }, []);
 
   return (
     <SidebarProvider>
