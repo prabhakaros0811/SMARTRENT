@@ -30,24 +30,39 @@ import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { mockTenants, mockProperties } from '@/lib/data';
-import type { Tenant, User } from '@/lib/types';
+import { mockTenants, mockProperties, mockRentPayments } from '@/lib/data';
+import type { Tenant, User, Property } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { PlusCircle, Trash2 } from 'lucide-react';
+import { PlusCircle, Trash2, FileText } from 'lucide-react';
+import { formatCurrency } from '@/lib/utils';
 
 
 export default function OwnerTenantsPage() {
     const { toast } = useToast();
     const [tenants, setTenants] = useState<(Tenant & User)[]>(mockTenants);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-    
-    // Form state
+    const [isRentDialogOpen, setIsRentDialogOpen] = useState(false);
+    const [selectedTenant, setSelectedTenant] = useState<(Tenant & User & { property?: Property }) | null>(null);
+
+    // Form state for adding tenant
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [propertyId, setPropertyId] = useState('');
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
+
+    // Form state for requesting rent
+    const [rentMonth, setRentMonth] = useState(new Date().toLocaleString('default', { month: 'long' }));
+    const [rentYear, setRentYear] = useState(new Date().getFullYear());
   
+    const resetAddTenantForm = () => {
+        setName('');
+        setEmail('');
+        setPropertyId('');
+        setUserId('');
+        setPassword('');
+    }
+
     const handleAddTenant = () => {
       if (!name || !email || !propertyId || !userId || !password) {
         toast({
@@ -66,6 +81,12 @@ export default function OwnerTenantsPage() {
         });
         return;
       }
+
+      // Find the selected property and update its tenantId
+      const propertyIndex = mockProperties.findIndex(p => p.id === propertyId);
+      if (propertyIndex !== -1) {
+          mockProperties[propertyIndex].tenantId = userId;
+      }
       
       const newTenant: Tenant & User = {
         id: userId,
@@ -81,34 +102,80 @@ export default function OwnerTenantsPage() {
       mockTenants.push(newTenant);
       setTenants([...mockTenants]);
 
-      // Reset form and close add dialog
-      setName('');
-      setEmail('');
-      setPropertyId('');
-      setUserId('');
-      setPassword('');
+      resetAddTenantForm();
       setIsAddDialogOpen(false);
 
       toast({
         title: 'Tenant Added Successfully!',
-        description: `${name} has been added.`,
+        description: `${name} has been added with User ID: ${userId}`,
       });
     };
 
     const handleRemoveTenant = (tenantId: string) => {
         const tenantIndex = mockTenants.findIndex(t => t.id === tenantId);
         if (tenantIndex > -1) {
-            const tenantName = mockTenants[tenantIndex].name;
-            // Instead of just removing, we could mark as inactive in a real DB.
+            const tenant = mockTenants[tenantIndex];
+            const tenantName = tenant.name;
+
+            // Unassign tenant from property
+            const propertyIndex = mockProperties.findIndex(p => p.id === tenant.propertyId);
+            if (propertyIndex !== -1) {
+                mockProperties[propertyIndex].tenantId = undefined;
+            }
+            
             // For mock data, we splice.
             mockTenants.splice(tenantIndex, 1);
             setTenants([...mockTenants]);
+            
             toast({
                 title: 'Tenant Removed',
                 description: `${tenantName} has been removed and their access is revoked.`,
             });
         }
     };
+
+    const handleOpenRentDialog = (tenant: Tenant & User) => {
+        const property = mockProperties.find(p => p.id === tenant.propertyId);
+        setSelectedTenant({...tenant, property });
+        setIsRentDialogOpen(true);
+    };
+
+    const handleSendRentRequest = () => {
+        if (!selectedTenant || !selectedTenant.property) {
+             toast({ variant: "destructive", title: "Error", description: "Invalid tenant or property." });
+            return;
+        }
+
+        const existingRequest = mockRentPayments.find(p => p.tenantId === selectedTenant.id && p.month === rentMonth && p.year === rentYear);
+
+        if (existingRequest) {
+            toast({ variant: "destructive", title: "Duplicate Request", description: `A rent request for ${rentMonth} ${rentYear} already exists.` });
+            return;
+        }
+
+        const dueDate = new Date(rentYear, new Date(Date.parse(rentMonth +" 1, 2024")).getMonth(), 5);
+
+        const newRentPayment = {
+            id: `rent-${Date.now()}`,
+            propertyId: selectedTenant.property.id,
+            tenantId: selectedTenant.id,
+            month: rentMonth,
+            year: rentYear,
+            amount: selectedTenant.property.rent,
+            status: 'Pending' as 'Pending',
+            dueDate: dueDate.toISOString(),
+        };
+
+        mockRentPayments.unshift(newRentPayment);
+
+        toast({
+            title: 'Rent Request Sent',
+            description: `Request for ${formatCurrency(newRentPayment.amount)} sent to ${selectedTenant.name} for ${rentMonth} ${rentYear}.`,
+        });
+
+        setIsRentDialogOpen(false);
+        setSelectedTenant(null);
+    }
   
 
   return (
@@ -123,7 +190,10 @@ export default function OwnerTenantsPage() {
         </div>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button size="sm" className="gap-1">
+            <Button size="sm" className="gap-1" onClick={() => {
+                resetAddTenantForm();
+                setIsAddDialogOpen(true);
+            }}>
               <PlusCircle className="h-4 w-4" />
               Add Tenant
             </Button>
@@ -190,9 +260,7 @@ export default function OwnerTenantsPage() {
               <TableHead>Property</TableHead>
               <TableHead>User ID</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>
-                <span className="sr-only">Actions</span>
-              </TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -216,7 +284,11 @@ export default function OwnerTenantsPage() {
                   </TableCell>
                   <TableCell><code>{tenant.id}</code></TableCell>
                   <TableCell>{tenant.email}</TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right space-x-2">
+                      <Button variant="outline" size="sm" onClick={() => handleOpenRentDialog(tenant)} disabled={!property}>
+                          <FileText className="h-4 w-4 mr-2" />
+                          Request Rent
+                      </Button>
                       <Button variant="ghost" size="icon" onClick={() => handleRemoveTenant(tenant.id)}>
                           <Trash2 className="h-4 w-4" />
                           <span className="sr-only">Remove Tenant</span>
@@ -229,6 +301,49 @@ export default function OwnerTenantsPage() {
         </Table>
       </CardContent>
     </Card>
+
+    {/* Rent Request Dialog */}
+    <Dialog open={isRentDialogOpen} onOpenChange={setIsRentDialogOpen}>
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Send Rent Request to {selectedTenant?.name}</DialogTitle>
+                <DialogDescription>
+                    This will create a new pending payment for the tenant for the selected month.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">Property</Label>
+                    <Input value={selectedTenant?.property?.title || ''} readOnly className="col-span-3" />
+                </div>
+                 <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">Rent Amount</Label>
+                    <Input value={formatCurrency(selectedTenant?.property?.rent || 0)} readOnly className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="month" className="text-right">Month</Label>
+                    <Select value={rentMonth} onValueChange={setRentMonth}>
+                        <SelectTrigger className="col-span-3">
+                            <SelectValue placeholder="Select month" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map(m => (
+                                <SelectItem key={m} value={m}>{m}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+                 <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="year" className="text-right">Year</Label>
+                    <Input id="year" type="number" value={rentYear} onChange={(e) => setRentYear(Number(e.target.value))} className="col-span-3" />
+                </div>
+            </div>
+            <DialogFooter>
+                 <Button variant="outline" onClick={() => setIsRentDialogOpen(false)}>Cancel</Button>
+                <Button onClick={handleSendRentRequest}>Send Request</Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
     </>
   );
 }

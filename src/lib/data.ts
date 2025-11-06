@@ -74,11 +74,11 @@ export let mockTenants: (Tenant & User)[] = [
   },
 ];
 
-export const mockRentPayments: RentPayment[] = [
+export let mockRentPayments: RentPayment[] = [
   { id: 'rent-1', propertyId: 'prop-1', tenantId: 'tenant-1', month: 'July', year: 2024, amount: 25000, status: 'Paid', dueDate: '2024-07-05', paymentDate: '2024-07-03' },
   { id: 'rent-2', propertyId: 'prop-1', tenantId: 'tenant-1', month: 'August', year: 2024, amount: 25000, status: 'Pending', dueDate: '2024-08-05' },
   { id: 'rent-3', propertyId: 'prop-2', tenantId: 'tenant-2', month: 'July', year: 2024, amount: 45000, status: 'Paid', dueDate: '2024-07-10', paymentDate: '2024-07-08' },
-  { id: 'rent-4', propertyId: 'prop-2', tenantId: 'tenant-2', month: 'August', year: 2024, amount: 45000, status: 'Pending', dueDate: '2024-8-10' },
+  { id: 'rent-4', propertyId: 'prop-2', tenantId: 'tenant-2', month: 'August', year: 2024, amount: 45000, status: 'Pending', dueDate: '2024-08-10' },
   { id: 'rent-5', propertyId: 'prop-1', tenantId: 'tenant-1', month: 'June', year: 2024, amount: 25000, status: 'Paid', dueDate: '2024-06-05', paymentDate: '2024-06-01' },
 ];
 
@@ -87,7 +87,7 @@ export const mockBills: Bill[] = [
     { id: 'bill-2', propertyId: 'prop-1', tenantId: 'tenant-1', type: 'Water', amount: 500, status: 'Pending', dueDate: '2024-08-15', month: 'August', year: 2024 },
 ]
 
-export const mockComplaints: Complaint[] = [
+export let mockComplaints: Complaint[] = [
   { id: 'comp-1', tenantId: 'tenant-1', propertyId: 'prop-1', message: 'Leaky faucet in the kitchen.', status: 'Pending', date: '2024-07-20', category: 'Maintenance' },
   { id: 'comp-2', tenantId: 'tenant-2', propertyId: 'prop-2', message: 'Noise complaint about neighbors.', status: 'Resolved', date: '2024-06-15', category: 'Civil' },
 ];
