@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -27,11 +30,66 @@ import {
 import { mockComplaints } from '@/lib/data';
 import { formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
-import { Send } from 'lucide-react';
+import { Send, LoaderCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import type { Complaint } from '@/lib/types';
 
 export default function ComplaintsPage() {
+  const { toast } = useToast();
   const tenantId = 'tenant-1'; // Mock logged-in tenant
-  const complaints = mockComplaints.filter(c => c.tenantId === tenantId);
+  const propertyId = 'prop-1'; // Mock property for the tenant
+
+  // Local state for complaints to re-render the list on submission
+  const [complaints, setComplaints] = useState<Complaint[]>(
+    mockComplaints.filter(c => c.tenantId === tenantId)
+  );
+  
+  const [category, setCategory] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!category || !message) {
+      toast({
+        variant: 'destructive',
+        title: 'Submission Failed',
+        description: 'Please select a category and enter a message.',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      const newComplaint: Complaint = {
+        id: `comp-${Date.now()}`,
+        tenantId,
+        propertyId,
+        category: category as 'Maintenance' | 'Civil',
+        message,
+        status: 'Pending',
+        date: new Date().toISOString(),
+      };
+
+      // Add to the beginning of the mock data array
+      mockComplaints.unshift(newComplaint); 
+
+      // Update local state to re-render the list
+      setComplaints(prev => [newComplaint, ...prev]);
+
+      // Reset form
+      setCategory('');
+      setMessage('');
+      setIsSubmitting(false);
+
+      toast({
+        title: 'Complaint Submitted',
+        description: 'Your complaint has been sent to the property owner.',
+      });
+    }, 1000);
+  };
 
   return (
     <div className="grid gap-6 lg:grid-cols-5">
@@ -71,38 +129,44 @@ export default function ComplaintsPage() {
       </div>
 
       <div className="lg:col-span-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Submit a New Complaint</CardTitle>
-            <CardDescription>
-              Let your property owner know about any issues.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="maintenance">Maintenance</SelectItem>
-                  <SelectItem value="civil">Civil</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="message">Message</Label>
-              <Textarea id="message" placeholder="Describe the issue in detail..." />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-              <Send className="mr-2 h-4 w-4" />
-              Submit Complaint
-            </Button>
-          </CardFooter>
-        </Card>
+        <form onSubmit={handleSubmit}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Submit a New Complaint</CardTitle>
+              <CardDescription>
+                Let your property owner know about any issues.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="category">Category</Label>
+                <Select value={category} onValueChange={setCategory}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Maintenance">Maintenance</SelectItem>
+                    <SelectItem value="Civil">Civil</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="message">Message</Label>
+                <Textarea id="message" placeholder="Describe the issue in detail..." value={message} onChange={(e) => setMessage(e.target.value)} />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="mr-2 h-4 w-4" />
+                )}
+                Submit Complaint
+              </Button>
+            </CardFooter>
+          </Card>
+        </form>
       </div>
     </div>
   );

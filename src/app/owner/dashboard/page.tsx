@@ -27,12 +27,16 @@ import { Users, Home, IndianRupee, ShieldAlert } from 'lucide-react';
 import { mockTenants, mockProperties, mockRentPayments, mockComplaints } from '@/lib/data';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import React from 'react';
 
 export default function OwnerDashboard() {
   const totalTenants = mockTenants.length;
   const totalProperties = mockProperties.length;
   const unpaidRents = mockRentPayments.filter(p => p.status === 'Pending').length;
-  const pendingComplaints = mockComplaints.filter(c => c.status === 'Pending').length;
+  
+  // Use a state to make the component reactive to data changes
+  const [complaints, setComplaints] = React.useState(mockComplaints);
+  const pendingComplaints = complaints.filter(c => c.status === 'Pending').length;
 
   const chartData = [
     { month: 'Mar', paid: 45000, pending: 25000 },
@@ -126,7 +130,7 @@ export default function OwnerDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {mockComplaints.slice(0, 4).map((complaint) => (
+                {complaints.slice(0, 4).map((complaint) => (
                   <TableRow key={complaint.id}>
                     <TableCell className="font-medium">{mockTenants.find(t => t.id === complaint.tenantId)?.name}</TableCell>
                     <TableCell>{complaint.category}</TableCell>
