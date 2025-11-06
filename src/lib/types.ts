@@ -37,9 +37,10 @@ export interface RentPayment {
   month: string;
   year: number;
   amount: number;
-  status: 'Paid' | 'Pending';
+  status: 'Paid' | 'Pending' | 'Processing' | 'Rejected';
   dueDate: string;
   paymentDate?: string;
+  paymentMethod?: 'UPI' | 'Cash';
 }
 
 export interface Bill {

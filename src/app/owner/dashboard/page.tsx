@@ -1,5 +1,6 @@
 "use client";
 
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -23,20 +24,24 @@ import {
   ChartLegendContent,
 } from '@/components/ui/chart';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { Users, Home, IndianRupee, ShieldAlert } from 'lucide-react';
+import { Users, Home, IndianRupee, ShieldAlert, CheckCircle, XCircle } from 'lucide-react';
 import { mockTenants, mockProperties, mockRentPayments, mockComplaints } from '@/lib/data';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
-import React from 'react';
+import type { RentPayment } from '@/lib/types';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 export default function OwnerDashboard() {
+  const { toast } = useToast();
   const totalTenants = mockTenants.length;
   const totalProperties = mockProperties.length;
-  const unpaidRents = mockRentPayments.filter(p => p.status === 'Pending').length;
+  
+  // Use state for reactive updates
+  const [complaints, setComplaints] = React.useState(mockComplaints);
+  const [rentPayments, setRentPayments] = React.useState(mockRentPayments);
 
-  // Use state for complaints to ensure the component re-renders when mockData changes.
-  const [complaints] = React.useState(mockComplaints);
-
+  const unpaidRents = rentPayments.filter(p => p.status === 'Pending').length;
   const pendingComplaints = complaints.filter(c => c.status === 'Pending').length;
 
   const chartData = [
@@ -51,6 +56,33 @@ export default function OwnerDashboard() {
     paid: { label: 'Paid', color: 'hsl(var(--chart-2))' },
     pending: { label: 'Pending', color: 'hsl(var(--chart-5))' },
   };
+
+  const handlePaymentConfirmation = (paymentId: string, action: 'confirm' | 'reject') => {
+    const paymentIndex = mockRentPayments.findIndex(p => p.id === paymentId);
+    if (paymentIndex !== -1) {
+        if (action === 'confirm') {
+            mockRentPayments[paymentIndex].status = 'Paid';
+            mockRentPayments[paymentIndex].paymentDate = new Date().toISOString();
+            toast({ title: 'Payment Confirmed', description: 'The rent status has been updated to "Paid".' });
+        } else {
+            mockRentPayments[paymentIndex].status = 'Pending'; // Or a new 'Rejected' status
+            toast({ variant: 'destructive', title: 'Payment Rejected', description: 'The rent status has been reverted to "Pending".' });
+        }
+        setRentPayments([...mockRentPayments]);
+    }
+  };
+  
+  const getBadgeVariant = (status: RentPayment['status']) => {
+    switch (status) {
+        case 'Paid': return 'secondary';
+        case 'Pending': return 'destructive';
+        case 'Processing': return 'default';
+        case 'Rejected': return 'destructive';
+        default: return 'outline';
+    }
+  }
+
+  const paymentsToConfirm = rentPayments.filter(p => p.status === 'Processing');
 
   return (
     <div className="grid gap-6">
@@ -92,6 +124,48 @@ export default function OwnerDashboard() {
           </CardContent>
         </Card>
       </div>
+
+       {paymentsToConfirm.length > 0 && (
+         <Card>
+            <CardHeader>
+                <CardTitle>Awaiting Payment Confirmation</CardTitle>
+                <CardDescription>Review payments submitted by tenants and confirm their receipt.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                 <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Tenant</TableHead>
+                            <TableHead>Month</TableHead>
+                            <TableHead>Amount</TableHead>
+                            <TableHead>Method</TableHead>
+                            <TableHead className="text-right">Action</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paymentsToConfirm.map(payment => (
+                            <TableRow key={payment.id}>
+                                <TableCell>{mockTenants.find(t => t.id === payment.tenantId)?.name}</TableCell>
+                                <TableCell>{payment.month} {payment.year}</TableCell>
+                                <TableCell>{formatCurrency(payment.amount)}</TableCell>
+                                <TableCell>
+                                    <Badge variant="outline">{payment.paymentMethod}</Badge>
+                                </TableCell>
+                                <TableCell className="text-right space-x-2">
+                                    <Button size="sm" variant="secondary" onClick={() => handlePaymentConfirmation(payment.id, 'confirm')}>
+                                        <CheckCircle className="mr-2 h-4 w-4" /> Confirm
+                                    </Button>
+                                     <Button size="sm" variant="ghost" className="text-destructive" onClick={() => handlePaymentConfirmation(payment.id, 'reject')}>
+                                        <XCircle className="mr-2 h-4 w-4" /> Reject
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>

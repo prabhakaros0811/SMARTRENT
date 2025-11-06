@@ -21,6 +21,7 @@ import { mockRentPayments, mockBills } from '@/lib/data';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { LoaderCircle } from 'lucide-react';
+import type { RentPayment } from '@/lib/types';
 
 export default function PaymentHistoryPage() {
   const [tenantId, setTenantId] = React.useState<string | null>(null);
@@ -32,6 +33,16 @@ export default function PaymentHistoryPage() {
 
   const rentHistory = tenantId ? mockRentPayments.filter(p => p.tenantId === tenantId) : [];
   const billHistory = tenantId ? mockBills.filter(b => b.tenantId === tenantId) : [];
+
+  const getBadgeVariant = (status: RentPayment['status']) => {
+    switch (status) {
+        case 'Paid': return 'secondary';
+        case 'Pending': return 'destructive';
+        case 'Processing': return 'default';
+        case 'Rejected': return 'destructive';
+        default: return 'outline';
+    }
+  }
 
   if (!tenantId) {
     return <div className="flex justify-center items-center h-full"><LoaderCircle className="h-8 w-8 animate-spin" /></div>;
@@ -60,6 +71,7 @@ export default function PaymentHistoryPage() {
                   <TableHead>Due Date</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Paid On</TableHead>
+                  <TableHead>Method</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -69,13 +81,14 @@ export default function PaymentHistoryPage() {
                     <TableCell>{formatCurrency(payment.amount)}</TableCell>
                     <TableCell>{formatDate(payment.dueDate)}</TableCell>
                     <TableCell>
-                      <Badge variant={payment.status === 'Paid' ? 'secondary' : 'destructive'}>
+                      <Badge variant={getBadgeVariant(payment.status)}>
                         {payment.status}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       {payment.paymentDate ? formatDate(payment.paymentDate) : 'N/A'}
                     </TableCell>
+                    <TableCell>{payment.paymentMethod || 'N/A'}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

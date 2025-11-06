@@ -8,39 +8,94 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Home, Bed, Bath, IndianRupee, Calendar, FileText, LoaderCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Home, Bed, Bath, IndianRupee, Calendar, FileText, LoaderCircle, CreditCard, Banknote, QrCode } from 'lucide-react';
 import { getPropertyForTenant, mockRentPayments, mockBills } from '@/lib/data';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
-import type { Property } from '@/lib/types';
+import type { Property, RentPayment } from '@/lib/types';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+  } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 
 export default function TenantDashboard() {
+  const { toast } = useToast();
   const [tenantId, setTenantId] = React.useState<string | null>(null);
   const [property, setProperty] = React.useState<Property | undefined>(undefined);
+  const [rentPayments, setRentPayments] = React.useState<RentPayment[]>([]);
+  const [bills, setBills] = React.useState(mockBills);
   
+  const [isPayDialogOpen, setIsPayDialogOpen] = React.useState(false);
+  const [selectedPayment, setSelectedPayment] = React.useState<RentPayment | null>(null);
+  const [paymentMethod, setPaymentMethod] = React.useState<'UPI' | 'Cash' | undefined>(undefined);
+
+
   React.useEffect(() => {
     const loggedInTenantId = localStorage.getItem('loggedInTenantId');
-    if (loggedInTenantId) {
-      setTenantId(loggedInTenantId);
-      const prop = getPropertyForTenant(loggedInTenantId);
-      setProperty(prop);
-    } else {
-        // Fallback for initial render or if not logged in
-        setTenantId('tenant-1');
-        setProperty(getPropertyForTenant('tenant-1'));
-    }
+    const id = loggedInTenantId || 'tenant-1';
+    setTenantId(id);
+    const prop = getPropertyForTenant(id);
+    setProperty(prop);
+    setRentPayments(mockRentPayments.filter(p => p.tenantId === id));
+    setBills(mockBills.filter(b => b.tenantId === id));
   }, []);
 
-  const recentRent = tenantId ? mockRentPayments.filter(p => p.tenantId === tenantId).sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0] : null;
-  const recentBill = tenantId ? mockBills.filter(b => b.tenantId === tenantId).sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0] : null;
+  const handleOpenPayDialog = (payment: RentPayment) => {
+    setSelectedPayment(payment);
+    setIsPayDialogOpen(true);
+  };
+
+  const handlePaymentSubmit = () => {
+    if (!selectedPayment || !paymentMethod) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Please select a payment method.'});
+        return;
+    }
+
+    const paymentIndex = mockRentPayments.findIndex(p => p.id === selectedPayment.id);
+    if (paymentIndex !== -1) {
+        mockRentPayments[paymentIndex].status = 'Processing';
+        mockRentPayments[paymentIndex].paymentMethod = paymentMethod;
+
+        // Force re-render
+        setRentPayments([...mockRentPayments.filter(p => p.tenantId === tenantId)]);
+    }
+
+    toast({ title: 'Payment Submitted', description: 'Your payment is now being processed by the owner.' });
+    setIsPayDialogOpen(false);
+    setSelectedPayment(null);
+    setPaymentMethod(undefined);
+  };
+
+  const getBadgeVariant = (status: RentPayment['status']) => {
+    switch (status) {
+        case 'Paid': return 'secondary';
+        case 'Pending': return 'destructive';
+        case 'Processing': return 'default';
+        case 'Rejected': return 'destructive';
+        default: return 'outline';
+    }
+  }
+
+  const recentRent = rentPayments.sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0];
+  const recentBill = bills.sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0];
 
   if (!tenantId || !property) {
     return <div className="flex justify-center items-center h-full"><LoaderCircle className="h-8 w-8 animate-spin" /></div>;
   }
 
   return (
+    <>
     <div className="grid gap-6 lg:grid-cols-3">
       <div className="lg:col-span-2">
         <Card className="overflow-hidden">
@@ -101,11 +156,18 @@ export default function TenantDashboard() {
                       <Calendar className="h-3 w-3" /> Due by {formatDate(recentRent.dueDate)}
                     </p>
                   </div>
-                  <Badge variant={recentRent.status === 'Paid' ? 'secondary' : 'destructive'}>
+                   <Badge variant={getBadgeVariant(recentRent.status)}>
                     {recentRent.status}
                   </Badge>
                 </div>
-                <p className="text-right font-bold mt-1">{formatCurrency(recentRent.amount)}</p>
+                <div className="flex justify-between items-center mt-2">
+                    <p className="text-lg font-bold">{formatCurrency(recentRent.amount)}</p>
+                    {recentRent.status === 'Pending' && (
+                         <Button size="sm" onClick={() => handleOpenPayDialog(recentRent)}>
+                            <CreditCard className="mr-2 h-4 w-4" /> Pay Now
+                        </Button>
+                    )}
+                </div>
               </div>
             )}
             <Separator />
@@ -129,5 +191,45 @@ export default function TenantDashboard() {
         </Card>
       </div>
     </div>
+
+    {/* Payment Dialog */}
+     <Dialog open={isPayDialogOpen} onOpenChange={setIsPayDialogOpen}>
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Pay Rent: {formatCurrency(selectedPayment?.amount || 0)}</DialogTitle>
+                <DialogDescription>
+                    Select your payment method. The owner will be notified to confirm the payment.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+                <RadioGroup onValueChange={(value: 'UPI' | 'Cash') => setPaymentMethod(value)}>
+                    <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-primary">
+                        <RadioGroupItem value="UPI" id="upi" />
+                        <Label htmlFor="upi" className="flex items-center gap-3 text-base cursor-pointer">
+                            <QrCode className="h-5 w-5"/> Pay with UPI
+                        </Label>
+                    </div>
+                     <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-primary">
+                        <RadioGroupItem value="Cash" id="cash" />
+                        <Label htmlFor="cash" className="flex items-center gap-3 text-base cursor-pointer">
+                           <Banknote className="h-5 w-5" /> Pay with Cash
+                        </Label>
+                    </div>
+                </RadioGroup>
+
+                 {paymentMethod === 'UPI' && (
+                    <div className='mt-4 p-4 bg-muted rounded-md text-center'>
+                        <p className="text-sm text-muted-foreground">Scan the QR code or use the UPI ID:</p>
+                        <p className="font-mono mt-1">owner@okhdfcbank</p>
+                    </div>
+                )}
+            </div>
+            <DialogFooter>
+                <Button variant="outline" onClick={() => setIsPayDialogOpen(false)}>Cancel</Button>
+                <Button onClick={handlePaymentSubmit}>I have paid</Button>
+            </DialogFooter>
+        </DialogContent>
+     </Dialog>
+    </>
   );
 }
