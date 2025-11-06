@@ -33,9 +33,10 @@ export default function OwnerDashboard() {
   const totalTenants = mockTenants.length;
   const totalProperties = mockProperties.length;
   const unpaidRents = mockRentPayments.filter(p => p.status === 'Pending').length;
-  
-  // Use a state to make the component reactive to data changes
-  const [complaints, setComplaints] = React.useState(mockComplaints);
+
+  // Use state for complaints to ensure the component re-renders when mockData changes.
+  const [complaints] = React.useState(mockComplaints);
+
   const pendingComplaints = complaints.filter(c => c.status === 'Pending').length;
 
   const chartData = [
