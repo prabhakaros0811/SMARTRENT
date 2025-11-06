@@ -41,6 +41,7 @@ export function LoginForm({ userType }: LoginFormProps) {
       ? "Access your dashboard to manage properties."
       : "Login to view your rental information.";
   const Icon = userType === "owner" ? Icons.owner : Icons.tenant;
+  const buttonVariant = userType === "owner" ? "default" : "accent";
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
@@ -70,7 +71,7 @@ export function LoginForm({ userType }: LoginFormProps) {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" type="submit" disabled={isLoading}>
+            <Button className="w-full" variant={userType === 'owner' ? 'default' : 'accent'} type="submit" disabled={isLoading}>
               {isLoading ? (
                 <LoaderCircle className="animate-spin" />
               ) : (

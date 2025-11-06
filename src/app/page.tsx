@@ -47,7 +47,7 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <Link href="/owner/login" className="w-full">
-              <Button className="w-full" variant="outline">
+              <Button className="w-full">
                 Owner Login <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
@@ -66,7 +66,7 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <Link href="/tenant/login" className="w-full">
-               <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+               <Button className="w-full" variant="accent">
                 Tenant Login <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
