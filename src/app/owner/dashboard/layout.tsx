@@ -1,11 +1,9 @@
 import Link from 'next/link';
 import {
   Home,
-  Lightbulb,
   Users,
   FileText,
   MessageSquareWarning,
-  PanelLeft,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -20,7 +18,6 @@ import {
 } from '@/components/ui/sidebar';
 import { UserNav } from '@/components/user-nav';
 import { Icons } from '@/components/icons';
-import { Button } from '@/components/ui/button';
 import { mockOwner } from '@/lib/data';
 
 export default function OwnerDashboardLayout({
@@ -48,30 +45,28 @@ export default function OwnerDashboardLayout({
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <Link href="/owner/dashboard/rent-prediction" passHref>
-                <SidebarMenuButton tooltip="Rent Prediction">
-                  <Lightbulb />
-                  Rent Prediction
+              <Link href="/owner/dashboard/tenants" passHref>
+                <SidebarMenuButton tooltip="Tenants">
+                  <Users />
+                  Tenants
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Tenants">
-                <Users />
-                Tenants
-              </SidebarMenuButton>
+              <Link href="/owner/dashboard/properties" passHref>
+                <SidebarMenuButton tooltip="Properties">
+                  <FileText />
+                  Properties
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Properties">
-                <FileText />
-                Properties
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Complaints">
-                <MessageSquareWarning />
-                Complaints
-              </SidebarMenuButton>
+              <Link href="/owner/dashboard/complaints" passHref>
+                <SidebarMenuButton tooltip="Complaints">
+                  <MessageSquareWarning />
+                  Complaints
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
