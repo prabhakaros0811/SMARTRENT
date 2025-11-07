@@ -35,6 +35,14 @@ export function LoginForm({ userType }: LoginFormProps) {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!username || !password) {
+      toast({
+        variant: 'destructive',
+        title: 'Validation Error',
+        description: 'Please enter both username and password.',
+      });
+      return;
+    }
     setIsLoading(true);
 
     // Mock authentication

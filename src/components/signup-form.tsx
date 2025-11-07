@@ -35,6 +35,15 @@ export function SignupForm({ userType }: SignupFormProps) {
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
+     if (!name || !email || !password) {
+      toast({
+        variant: 'destructive',
+        title: 'Signup Failed',
+        description: 'Please fill in all fields.',
+      });
+      return;
+    }
+    
     setIsLoading(true);
 
     setTimeout(() => {
