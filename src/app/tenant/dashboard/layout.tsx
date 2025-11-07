@@ -5,7 +5,7 @@ import {
   Home,
   History,
   MessageSquareWarning,
-  Star,
+  FileArchive,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -66,18 +66,20 @@ export default function TenantDashboardLayout({
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
+              <Link href="/tenant/dashboard/documents" passHref>
+                <SidebarMenuButton tooltip="Documents">
+                  <FileArchive />
+                  Documents
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
               <Link href="/tenant/dashboard/complaints" passHref>
                 <SidebarMenuButton tooltip="Complaints">
                   <MessageSquareWarning />
                   Complaints
                 </SidebarMenuButton>
               </Link>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Feedback">
-                <Star />
-                Feedback
-              </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>

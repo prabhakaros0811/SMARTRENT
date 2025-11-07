@@ -70,3 +70,11 @@ export interface Announcement {
   message: string;
   date: string;
 }
+
+export interface Document {
+  id: string;
+  tenantId: string;
+  name: string;
+  uploadDate: string;
+  url: string; // For mock purposes, will be a placeholder
+}

@@ -30,11 +30,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { mockTenants, mockProperties, mockRentPayments } from '@/lib/data';
-import type { Tenant, User, Property } from '@/lib/types';
+import { mockTenants, mockProperties, mockRentPayments, mockDocuments } from '@/lib/data';
+import type { Tenant, User, Property, Document } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { PlusCircle, Trash2, FileText } from 'lucide-react';
-import { formatCurrency } from '@/lib/utils';
+import { PlusCircle, Trash2, FileText, FileArchive, File as FileIcon } from 'lucide-react';
+import { formatCurrency, formatDate } from '@/lib/utils';
 
 
 export default function OwnerTenantsPage() {
@@ -42,6 +42,7 @@ export default function OwnerTenantsPage() {
     const [tenants, setTenants] = useState<(Tenant & User)[]>(mockTenants);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [isRentDialogOpen, setIsRentDialogOpen] = useState(false);
+    const [isDocsDialogOpen, setIsDocsDialogOpen] = useState(false);
     const [selectedTenant, setSelectedTenant] = useState<(Tenant & User & { property?: Property }) | null>(null);
 
     // Form state for adding tenant
@@ -139,6 +140,17 @@ export default function OwnerTenantsPage() {
         setSelectedTenant({...tenant, property });
         setIsRentDialogOpen(true);
     };
+
+    const handleOpenDocsDialog = (tenant: Tenant & User) => {
+        setSelectedTenant(tenant);
+        setIsDocsDialogOpen(true);
+    };
+
+    const getTenantDocuments = () => {
+        if (!selectedTenant) return [];
+        return mockDocuments.filter(doc => doc.tenantId === selectedTenant.id);
+    };
+
 
     const handleSendRentRequest = () => {
         if (!selectedTenant || !selectedTenant.property) {
@@ -285,6 +297,10 @@ export default function OwnerTenantsPage() {
                   <TableCell><code>{tenant.id}</code></TableCell>
                   <TableCell>{tenant.email}</TableCell>
                   <TableCell className="text-right space-x-2">
+                       <Button variant="outline" size="sm" onClick={() => handleOpenDocsDialog(tenant)}>
+                          <FileArchive className="h-4 w-4 mr-2" />
+                          View Docs
+                      </Button>
                       <Button variant="outline" size="sm" onClick={() => handleOpenRentDialog(tenant)} disabled={!property}>
                           <FileText className="h-4 w-4 mr-2" />
                           Request Rent
@@ -341,6 +357,52 @@ export default function OwnerTenantsPage() {
             <DialogFooter>
                  <Button variant="outline" onClick={() => setIsRentDialogOpen(false)}>Cancel</Button>
                 <Button onClick={handleSendRentRequest}>Send Request</Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
+
+    {/* View Documents Dialog */}
+    <Dialog open={isDocsDialogOpen} onOpenChange={setIsDocsDialogOpen}>
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Documents for {selectedTenant?.name}</DialogTitle>
+                <DialogDescription>
+                    Review the documents uploaded by the tenant.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Document Name</TableHead>
+                            <TableHead>Upload Date</TableHead>
+                            <TableHead className="text-right">Action</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {getTenantDocuments().length > 0 ? getTenantDocuments().map(doc => (
+                            <TableRow key={doc.id}>
+                                <TableCell className="flex items-center gap-2">
+                                    <FileIcon className="h-4 w-4 text-muted-foreground" />
+                                    {doc.name}
+                                </TableCell>
+                                <TableCell>{formatDate(doc.uploadDate)}</TableCell>
+                                <TableCell className="text-right">
+                                    <Button variant="outline" size="sm" onClick={() => window.open(doc.url, '_blank')}>View</Button>
+                                </TableCell>
+                            </TableRow>
+                        )) : (
+                            <TableRow>
+                                <TableCell colSpan={3} className="text-center text-muted-foreground">
+                                    No documents uploaded yet.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+            <DialogFooter>
+                <Button variant="outline" onClick={() => setIsDocsDialogOpen(false)}>Close</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>

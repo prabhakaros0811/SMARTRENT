@@ -1,5 +1,5 @@
 import type { LucideProps } from 'lucide-react';
-import { Home, User, UserCog } from 'lucide-react';
+import { Home, User, UserCog, FileUp } from 'lucide-react';
 
 export const Icons = {
   logo: (props: LucideProps) => (
@@ -19,4 +19,5 @@ export const Icons = {
   ),
   owner: (props: LucideProps) => <UserCog {...props} className="text-blue-500"/>,
   tenant: (props: LucideProps) => <User {...props} className="text-amber-500"/>,
+  upload: (props: LucideProps) => <FileUp {...props} />,
 };
