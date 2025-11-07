@@ -87,7 +87,7 @@ export default function TenantDashboardLayout({
             <SidebarTrigger className="flex items-center gap-2 font-semibold" />
             <UserNav user={currentUser} />
         </header>
-        <main className="flex-1 p-4 sm:p-6">{children}</main>
+        <main className="flex-1 p-4 sm:p-6 animate-fade-in">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

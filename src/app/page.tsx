@@ -24,7 +24,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center">
+      <div className="relative z-10 flex flex-col items-center text-center animate-fade-in-up">
         <Icons.logo className="h-16 w-16 mb-4 text-primary" />
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl font-headline">
           Welcome to RentEase
@@ -34,7 +34,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="relative z-10 mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 max-w-4xl w-full">
+      <div className="relative z-10 mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 max-w-4xl w-full animate-fade-in-up animation-delay-300">
         <Card className="transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl font-headline">

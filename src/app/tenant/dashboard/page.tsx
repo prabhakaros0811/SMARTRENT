@@ -96,7 +96,7 @@ export default function TenantDashboard() {
 
   return (
     <>
-    <div className="grid gap-6 lg:grid-cols-3">
+    <div className="grid gap-6 lg:grid-cols-3 animate-fade-in-up">
       <div className="lg:col-span-2">
         <Card className="overflow-hidden">
           <div className="relative h-64 w-full">

@@ -96,7 +96,7 @@ export default function OwnerDashboard() {
   const unpaidRents = pendingPayments.length;
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-6 animate-fade-in-up">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
