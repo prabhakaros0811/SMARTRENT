@@ -12,8 +12,8 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Home, Bed, Bath, IndianRupee, Calendar, FileText, LoaderCircle, CreditCard, Banknote, QrCode } from 'lucide-react';
-import { getPropertyForTenant, mockRentPayments, mockBills } from '@/lib/data';
+import { Home, Bed, Bath, IndianRupee, Calendar, FileText, LoaderCircle, CreditCard, Banknote, QrCode, Megaphone } from 'lucide-react';
+import { getPropertyForTenant, mockRentPayments, mockBills, mockAnnouncements } from '@/lib/data';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import type { Property, RentPayment } from '@/lib/types';
@@ -89,6 +89,7 @@ export default function TenantDashboard() {
 
   const pendingRent = rentPayments.find(p => p.status === 'Pending' || p.status === 'Rejected');
   const recentBill = bills.sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0];
+  const announcements = mockAnnouncements.slice(0, 3);
 
   if (!tenantId || !property) {
     return <div className="flex justify-center items-center h-full"><LoaderCircle className="h-8 w-8 animate-spin" /></div>;
@@ -190,6 +191,26 @@ export default function TenantDashboard() {
               </div>
             )}
           </CardContent>
+        </Card>
+
+         <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <Megaphone className="h-5 w-5 text-blue-500" />
+                    Announcements
+                </CardTitle>
+                 <CardDescription>Messages from your property owner.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                {announcements.length > 0 ? announcements.map(announcement => (
+                    <div key={announcement.id}>
+                        <p className="text-sm">{announcement.message}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{formatDate(announcement.date)}</p>
+                    </div>
+                )) : (
+                    <p className="text-sm text-muted-foreground text-center py-4">No new announcements.</p>
+                )}
+            </CardContent>
         </Card>
       </div>
     </div>
