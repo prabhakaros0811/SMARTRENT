@@ -5,6 +5,7 @@ import {
   FileText,
   MessageSquareWarning,
   Lightbulb,
+  Megaphone,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -66,6 +67,14 @@ export default function OwnerDashboardLayout({
                 <SidebarMenuButton tooltip="Complaints">
                   <MessageSquareWarning />
                   Complaints
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link href="/owner/dashboard/announcements" passHref>
+                <SidebarMenuButton tooltip="Announcements">
+                  <Megaphone />
+                  Announcements
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

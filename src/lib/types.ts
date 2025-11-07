@@ -64,3 +64,9 @@ export interface Complaint {
   date: string;
   category: 'Civil' | 'Maintenance';
 }
+
+export interface Announcement {
+  id: string;
+  message: string;
+  date: string;
+}

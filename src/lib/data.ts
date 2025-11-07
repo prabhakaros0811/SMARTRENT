@@ -1,4 +1,4 @@
-import type { User, Property, Tenant, RentPayment, Complaint, Bill } from './types';
+import type { User, Property, Tenant, RentPayment, Complaint, Bill, Announcement } from './types';
 
 export const mockOwner: User = {
   id: 'owner-1',
@@ -101,6 +101,11 @@ export const mockBills: Bill[] = [
 export let mockComplaints: Complaint[] = [
   { id: 'comp-1', tenantId: 'tenant-1', propertyId: 'prop-1', message: 'Leaky faucet in the kitchen.', status: 'Pending', date: '2024-07-20', category: 'Maintenance' },
   { id: 'comp-2', tenantId: 'tenant-2', propertyId: 'prop-2', message: 'Noise complaint about neighbors.', status: 'Resolved', date: '2024-06-15', category: 'Civil' },
+];
+
+export let mockAnnouncements: Announcement[] = [
+    { id: 'anno-1', message: 'The annual society meeting will be held on August 30th in the clubhouse.', date: '2024-07-25' },
+    { id: 'anno-2', message: 'Please note that the water supply will be interrupted tomorrow from 10 AM to 1 PM for maintenance.', date: '2024-07-18' },
 ];
 
 export const getTenantForProperty = (propertyId: string) => mockTenants.find(t => t.propertyId === propertyId);
