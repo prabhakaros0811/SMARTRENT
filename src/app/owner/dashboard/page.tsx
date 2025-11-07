@@ -24,7 +24,7 @@ import {
   ChartLegendContent,
 } from '@/components/ui/chart';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { Users, Home, IndianRupee, ShieldAlert, CheckCircle, XCircle } from 'lucide-react';
+import { Users, Home, IndianRupee, ShieldAlert, CheckCircle, XCircle, BellRing } from 'lucide-react';
 import { mockTenants, mockProperties, mockRentPayments, mockComplaints } from '@/lib/data';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
@@ -41,7 +41,6 @@ export default function OwnerDashboard() {
   const [complaints, setComplaints] = React.useState(mockComplaints);
   const [rentPayments, setRentPayments] = React.useState(mockRentPayments);
 
-  const unpaidRents = rentPayments.filter(p => p.status === 'Pending').length;
   const pendingComplaints = complaints.filter(c => c.status === 'Pending').length;
 
   const chartData = [
@@ -65,10 +64,20 @@ export default function OwnerDashboard() {
             mockRentPayments[paymentIndex].paymentDate = new Date().toISOString();
             toast({ title: 'Payment Confirmed', description: 'The rent status has been updated to "Paid".' });
         } else {
-            mockRentPayments[paymentIndex].status = 'Pending'; // Or a new 'Rejected' status
-            toast({ variant: 'destructive', title: 'Payment Rejected', description: 'The rent status has been reverted to "Pending".' });
+            mockRentPayments[paymentIndex].status = 'Rejected';
+            toast({ variant: 'destructive', title: 'Payment Rejected', description: 'The rent status has been updated to "Rejected".' });
         }
         setRentPayments([...mockRentPayments]);
+    }
+  };
+
+  const handleSendReminder = (payment: RentPayment) => {
+    const tenant = mockTenants.find(t => t.id === payment.tenantId);
+    if (tenant) {
+      toast({
+        title: 'Reminder Sent',
+        description: `A payment reminder has been sent to ${tenant.name} for ${payment.month} rent.`,
+      });
     }
   };
   
@@ -83,6 +92,8 @@ export default function OwnerDashboard() {
   }
 
   const paymentsToConfirm = rentPayments.filter(p => p.status === 'Processing');
+  const pendingPayments = rentPayments.filter(p => p.status === 'Pending' || p.status === 'Rejected');
+  const unpaidRents = pendingPayments.length;
 
   return (
     <div className="grid gap-6">
@@ -157,6 +168,49 @@ export default function OwnerDashboard() {
                                     </Button>
                                      <Button size="sm" variant="ghost" className="text-destructive" onClick={() => handlePaymentConfirmation(payment.id, 'reject')}>
                                         <XCircle className="mr-2 h-4 w-4" /> Reject
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+      )}
+
+      {pendingPayments.length > 0 && (
+         <Card>
+            <CardHeader>
+                <CardTitle>Pending Rent Reminders</CardTitle>
+                <CardDescription>Follow up with tenants who have outstanding payments.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                 <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Tenant</TableHead>
+                            <TableHead>Month</TableHead>
+                            <TableHead>Amount</TableHead>
+                             <TableHead>Due Date</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead className="text-right">Action</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {pendingPayments.map(payment => (
+                            <TableRow key={payment.id}>
+                                <TableCell>{mockTenants.find(t => t.id === payment.tenantId)?.name}</TableCell>
+                                <TableCell>{payment.month} {payment.year}</TableCell>
+                                <TableCell>{formatCurrency(payment.amount)}</TableCell>
+                                <TableCell>{formatDate(payment.dueDate)}</TableCell>
+                                <TableCell>
+                                  <Badge variant={getBadgeVariant(payment.status)}>
+                                    {payment.status}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell className="text-right">
+                                    <Button size="sm" variant="outline" onClick={() => handleSendReminder(payment)}>
+                                        <BellRing className="mr-2 h-4 w-4" /> Send Reminder
                                     </Button>
                                 </TableCell>
                             </TableRow>

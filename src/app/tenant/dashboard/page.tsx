@@ -87,7 +87,7 @@ export default function TenantDashboard() {
     }
   }
 
-  const recentRent = rentPayments.sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0];
+  const pendingRent = rentPayments.find(p => p.status === 'Pending' || p.status === 'Rejected');
   const recentBill = bills.sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())[0];
 
   if (!tenantId || !property) {
@@ -143,32 +143,34 @@ export default function TenantDashboard() {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle>Upcoming Payments</CardTitle>
             <CardDescription>Your latest payment statuses.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {recentRent && (
+            {pendingRent ? (
               <div>
                 <div className="flex justify-between items-start">
                   <div>
-                    <p className="font-semibold">Rent - {recentRent.month} {recentRent.year}</p>
+                    <p className="font-semibold">Rent - {pendingRent.month} {pendingRent.year}</p>
                     <p className="text-sm text-muted-foreground flex items-center gap-1">
-                      <Calendar className="h-3 w-3" /> Due by {formatDate(recentRent.dueDate)}
+                      <Calendar className="h-3 w-3" /> Due by {formatDate(pendingRent.dueDate)}
                     </p>
                   </div>
-                   <Badge variant={getBadgeVariant(recentRent.status)}>
-                    {recentRent.status}
+                   <Badge variant={getBadgeVariant(pendingRent.status)}>
+                    {pendingRent.status}
                   </Badge>
                 </div>
                 <div className="flex justify-between items-center mt-2">
-                    <p className="text-lg font-bold">{formatCurrency(recentRent.amount)}</p>
-                    {recentRent.status === 'Pending' && (
-                         <Button size="sm" onClick={() => handleOpenPayDialog(recentRent)}>
+                    <p className="text-lg font-bold">{formatCurrency(pendingRent.amount)}</p>
+                    {(pendingRent.status === 'Pending' || pendingRent.status === 'Rejected') && (
+                         <Button size="sm" onClick={() => handleOpenPayDialog(pendingRent)}>
                             <CreditCard className="mr-2 h-4 w-4" /> Pay Now
                         </Button>
                     )}
                 </div>
               </div>
+            ) : (
+                <p className="text-sm text-muted-foreground text-center py-4">No pending rent payments. You're all caught up!</p>
             )}
             <Separator />
             {recentBill && (
@@ -202,7 +204,7 @@ export default function TenantDashboard() {
                 </DialogDescription>
             </DialogHeader>
             <div className="py-4">
-                <RadioGroup onValueChange={(value: 'UPI' | 'Cash') => setPaymentMethod(value)}>
+                <RadioGroup onValueChange={(value: 'UPI' | 'Cash') => setPaymentMethod(value)} defaultValue={paymentMethod}>
                     <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-primary">
                         <RadioGroupItem value="UPI" id="upi" />
                         <Label htmlFor="upi" className="flex items-center gap-3 text-base cursor-pointer">
@@ -226,7 +228,7 @@ export default function TenantDashboard() {
             </div>
             <DialogFooter>
                 <Button variant="outline" onClick={() => setIsPayDialogOpen(false)}>Cancel</Button>
-                <Button onClick={handlePaymentSubmit}>I have paid</Button>
+                <Button onClick={handlePaymentSubmit} disabled={!paymentMethod}>I have paid</Button>
             </DialogFooter>
         </DialogContent>
      </Dialog>
