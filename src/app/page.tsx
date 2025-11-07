@@ -27,7 +27,7 @@ export default function Home() {
       <div className="relative z-10 flex flex-col items-center text-center">
         <Icons.logo className="h-16 w-16 mb-4 text-primary" />
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl font-headline">
-          Welcome to eMall Portal
+          Welcome to RentEase
         </h1>
         <p className="mt-6 text-lg leading-8 text-muted-foreground max-w-2xl">
           The all-in-one solution for managing your properties. Choose your role to get started.
@@ -74,7 +74,7 @@ export default function Home() {
         </Card>
       </div>
        <footer className="relative z-10 mt-16 text-center text-sm text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} eMall Portal. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} RentEase. All rights reserved.</p>
       </footer>
     </main>
   );

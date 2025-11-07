@@ -44,7 +44,7 @@ export default function TenantDashboardLayout({
         <SidebarHeader>
           <div className="flex items-center gap-2">
             <Icons.logo className="w-7 h-7 text-primary" />
-            <span className="text-lg font-semibold tracking-tighter">eMall Portal</span>
+            <span className="text-lg font-semibold tracking-tighter">RentEase</span>
           </div>
         </SidebarHeader>
         <SidebarContent>

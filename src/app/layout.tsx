@@ -3,7 +3,7 @@ import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'eMall Portal',
+  title: 'RentEase',
   description: 'A modern house rental portal for property owners and tenants.',
 };
 
