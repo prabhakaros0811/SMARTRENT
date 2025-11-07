@@ -23,7 +23,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={pending}>
+    <Button type="submit" className="w-full" variant="accent" disabled={pending}>
       {pending ? (
         <>
           <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
@@ -86,9 +86,9 @@ export function RentPredictionForm() {
       <SubmitButton />
 
       {state.prediction && (
-        <Card className="bg-primary/5 border-primary/20 mt-6 animate-in fade-in-50">
+        <Card className="bg-amber-500/5 border-amber-500/20 mt-6 animate-in fade-in-50">
           <CardHeader>
-            <CardTitle className="text-xl text-primary font-headline">
+            <CardTitle className="text-xl text-amber-500 font-headline">
               Predicted Monthly Rent
             </CardTitle>
           </CardHeader>

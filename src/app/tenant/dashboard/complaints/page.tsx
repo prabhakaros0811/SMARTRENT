@@ -170,7 +170,7 @@ export default function ComplaintsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isSubmitting}>
+              <Button type="submit" className="w-full" variant="accent" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                 ) : (

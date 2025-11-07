@@ -15,7 +15,7 @@ export default function RentPredictionPage() {
         <CardHeader>
           <div className="flex items-center gap-4">
             <div className="p-3 bg-primary/10 rounded-full">
-              <Lightbulb className="h-6 w-6 text-primary" />
+              <Lightbulb className="h-6 w-6 text-amber-500" />
             </div>
             <div>
               <CardTitle className="text-2xl font-headline">

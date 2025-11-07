@@ -117,22 +117,22 @@ export default function TenantDashboard() {
           </CardHeader>
           <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
-                <IndianRupee className="h-6 w-6 text-primary mb-1" />
+                <IndianRupee className="h-6 w-6 text-amber-500 mb-1" />
                 <span className="text-sm text-muted-foreground">Rent</span>
                 <span className="font-bold text-lg">{formatCurrency(property.rent)}</span>
             </div>
              <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
-                <Bed className="h-6 w-6 text-primary mb-1" />
+                <Bed className="h-6 w-6 text-amber-500 mb-1" />
                 <span className="text-sm text-muted-foreground">Bedrooms</span>
                 <span className="font-bold text-lg">{property.bedrooms}</span>
             </div>
              <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
-                <Bath className="h-6 w-6 text-primary mb-1" />
+                <Bath className="h-6 w-6 text-amber-500 mb-1" />
                 <span className="text-sm text-muted-foreground">Bathrooms</span>
                 <span className="font-bold text-lg">{property.bathrooms}</span>
             </div>
             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
-                <FileText className="h-6 w-6 text-primary mb-1" />
+                <FileText className="h-6 w-6 text-amber-500 mb-1" />
                 <span className="text-sm text-muted-foreground">Area</span>
                 <span className="font-bold text-lg">{property.squareFootage} sqft</span>
             </div>
@@ -163,7 +163,7 @@ export default function TenantDashboard() {
                 <div className="flex justify-between items-center mt-2">
                     <p className="text-lg font-bold">{formatCurrency(pendingRent.amount)}</p>
                     {(pendingRent.status === 'Pending' || pendingRent.status === 'Rejected') && (
-                         <Button size="sm" onClick={() => handleOpenPayDialog(pendingRent)}>
+                         <Button size="sm" variant="accent" onClick={() => handleOpenPayDialog(pendingRent)}>
                             <CreditCard className="mr-2 h-4 w-4" /> Pay Now
                         </Button>
                     )}
@@ -205,13 +205,13 @@ export default function TenantDashboard() {
             </DialogHeader>
             <div className="py-4">
                 <RadioGroup onValueChange={(value: 'UPI' | 'Cash') => setPaymentMethod(value)} defaultValue={paymentMethod}>
-                    <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-primary">
+                    <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-amber-500">
                         <RadioGroupItem value="UPI" id="upi" />
                         <Label htmlFor="upi" className="flex items-center gap-3 text-base cursor-pointer">
                             <QrCode className="h-5 w-5"/> Pay with UPI
                         </Label>
                     </div>
-                     <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-primary">
+                     <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-amber-500">
                         <RadioGroupItem value="Cash" id="cash" />
                         <Label htmlFor="cash" className="flex items-center gap-3 text-base cursor-pointer">
                            <Banknote className="h-5 w-5" /> Pay with Cash
@@ -228,7 +228,7 @@ export default function TenantDashboard() {
             </div>
             <DialogFooter>
                 <Button variant="outline" onClick={() => setIsPayDialogOpen(false)}>Cancel</Button>
-                <Button onClick={handlePaymentSubmit} disabled={!paymentMethod}>I have paid</Button>
+                <Button onClick={handlePaymentSubmit} variant="accent" disabled={!paymentMethod}>I have paid</Button>
             </DialogFooter>
         </DialogContent>
      </Dialog>
