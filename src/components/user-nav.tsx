@@ -19,6 +19,8 @@ interface UserNavProps {
 }
 
 export function UserNav({ user }: UserNavProps) {
+  const dashboardHome = user.role === 'owner' ? '/owner/dashboard' : '/tenant/dashboard';
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -40,12 +42,16 @@ export function UserNav({ user }: UserNavProps) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-          </DropdownMenuItem>
+          <Link href={`${dashboardHome}/profile`} passHref>
+            <DropdownMenuItem>
+              Profile
+            </DropdownMenuItem>
+          </Link>
+          <Link href={`${dashboardHome}/settings`} passHref>
+            <DropdownMenuItem>
+              Settings
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <Link href="/">
