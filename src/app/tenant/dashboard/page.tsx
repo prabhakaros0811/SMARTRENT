@@ -118,22 +118,22 @@ export default function TenantDashboard() {
           </CardHeader>
           <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
-                <IndianRupee className="h-6 w-6 text-amber-500 mb-1" />
+                <IndianRupee className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Rent</span>
                 <span className="font-bold text-lg">{formatCurrency(property.rent)}</span>
             </div>
              <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
-                <Bed className="h-6 w-6 text-amber-500 mb-1" />
+                <Bed className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Bedrooms</span>
                 <span className="font-bold text-lg">{property.bedrooms}</span>
             </div>
              <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
-                <Bath className="h-6 w-6 text-amber-500 mb-1" />
+                <Bath className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Bathrooms</span>
                 <span className="font-bold text-lg">{property.bathrooms}</span>
             </div>
             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
-                <FileText className="h-6 w-6 text-amber-500 mb-1" />
+                <FileText className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Area</span>
                 <span className="font-bold text-lg">{property.squareFootage} sqft</span>
             </div>
@@ -196,7 +196,7 @@ export default function TenantDashboard() {
          <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                    <Megaphone className="h-5 w-5 text-blue-500" />
+                    <Megaphone className="h-5 w-5 text-primary" />
                     Announcements
                 </CardTitle>
                  <CardDescription>Messages from your property owner.</CardDescription>
@@ -226,13 +226,13 @@ export default function TenantDashboard() {
             </DialogHeader>
             <div className="py-4">
                 <RadioGroup onValueChange={(value: 'UPI' | 'Cash') => setPaymentMethod(value)} defaultValue={paymentMethod}>
-                    <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-amber-500">
+                    <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-accent">
                         <RadioGroupItem value="UPI" id="upi" />
                         <Label htmlFor="upi" className="flex items-center gap-3 text-base cursor-pointer">
                             <QrCode className="h-5 w-5"/> Pay with UPI
                         </Label>
                     </div>
-                     <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-amber-500">
+                     <div className="flex items-center space-x-2 border rounded-md p-4 has-[:checked]:bg-secondary has-[:checked]:border-accent">
                         <RadioGroupItem value="Cash" id="cash" />
                         <Label htmlFor="cash" className="flex items-center gap-3 text-base cursor-pointer">
                            <Banknote className="h-5 w-5" /> Pay with Cash

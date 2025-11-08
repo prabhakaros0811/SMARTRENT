@@ -20,7 +20,7 @@ export default function OwnerSettingsPage() {
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <h3 className="text-lg font-semibold flex items-center gap-2">
-              <Bell className="h-5 w-5 text-blue-500" /> Notifications
+              <Bell className="h-5 w-5 text-primary" /> Notifications
             </h3>
             <p className="text-muted-foreground">
               This section is under development. Soon you'll be able to manage your email and push notification preferences here.
@@ -28,7 +28,7 @@ export default function OwnerSettingsPage() {
           </div>
           <div className="space-y-2">
             <h3 className="text-lg font-semibold flex items-center gap-2">
-              <Shield className="h-5 w-5 text-blue-500" /> Security
+              <Shield className="h-5 w-5 text-primary" /> Security
             </h3>
             <p className="text-muted-foreground">
               This section is under development. Soon you'll be able to change your password and manage account security.

@@ -67,7 +67,7 @@ export default function AnnouncementsPage() {
         <CardHeader>
           <div className="flex items-start gap-4">
             <div className="p-3 bg-primary/10 rounded-full">
-                <Megaphone className="h-6 w-6 text-blue-500" />
+                <Megaphone className="h-6 w-6 text-primary" />
             </div>
             <div>
                 <CardTitle>Send New Announcement</CardTitle>

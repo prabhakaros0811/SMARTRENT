@@ -17,7 +17,7 @@ export const Icons = {
       <polyline points="9 22 9 12 15 12 15 22" />
     </svg>
   ),
-  owner: (props: LucideProps) => <UserCog {...props} className="text-blue-500"/>,
-  tenant: (props: LucideProps) => <User {...props} className="text-amber-500"/>,
+  owner: (props: LucideProps) => <UserCog {...props} className="text-primary"/>,
+  tenant: (props: LucideProps) => <User {...props} className="text-accent"/>,
   upload: (props: LucideProps) => <FileUp {...props} />,
 };

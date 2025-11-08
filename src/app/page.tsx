@@ -12,12 +12,12 @@ import { useInView } from 'react-intersection-observer';
 
 const features = [
   {
-    icon: <Building2 className="w-8 h-8 text-blue-500" />,
+    icon: <Building2 className="w-8 h-8 text-primary" />,
     title: 'Property Management',
     description: 'Easily add, edit, and manage all your properties from a centralized dashboard.',
   },
   {
-    icon: <Users className="w-8 h-8 text-amber-500" />,
+    icon: <Users className="w-8 h-8 text-accent" />,
     title: 'Tenant Management',
     description: 'Onboard new tenants, track assignments, and manage tenant information seamlessly.',
   },
