@@ -65,7 +65,7 @@ export default function OwnerTenantsPage() {
     }
 
     const handleAddTenant = () => {
-      if (!name || !email || !propertyId || !userId || !password) {
+      if (!name.trim() || !email.trim() || !propertyId || !userId.trim() || !password.trim()) {
         toast({
             variant: "destructive",
             title: "Error",
@@ -146,7 +146,7 @@ export default function OwnerTenantsPage() {
         setIsDocsDialogOpen(true);
     };
 
-    const getTenantDocuments = () => {
+g    const getTenantDocuments = () => {
         if (!selectedTenant) return [];
         return mockDocuments.filter(doc => doc.tenantId === selectedTenant.id);
     };
@@ -259,7 +259,7 @@ export default function OwnerTenantsPage() {
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleAddTenant}>Add Tenant</Button>
+              <Button onClick={handleAddTenant} disabled={!name.trim() || !email.trim() || !propertyId || !userId.trim() || !password.trim()}>Add Tenant</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -276,12 +276,12 @@ export default function OwnerTenantsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tenants.map(tenant => {
+            {tenants.map((tenant, index) => {
               const property = mockProperties.find(
                 p => p.id === tenant.propertyId
               );
               return (
-                <TableRow key={tenant.id}>
+                <TableRow key={tenant.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="hidden h-9 w-9 sm:flex">
@@ -380,8 +380,8 @@ export default function OwnerTenantsPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {getTenantDocuments().length > 0 ? getTenantDocuments().map(doc => (
-                            <TableRow key={doc.id}>
+                        {getTenantDocuments().length > 0 ? getTenantDocuments().map((doc, index) => (
+                            <TableRow key={doc.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                                 <TableCell className="flex items-center gap-2">
                                     <FileIcon className="h-4 w-4 text-muted-foreground" />
                                     {doc.name}

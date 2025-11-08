@@ -106,8 +106,8 @@ export default function ComplaintsPage() {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-5 animate-fade-in-up">
-      <div className="lg:col-span-3">
+    <div className="grid gap-6 lg:grid-cols-5">
+      <div className="lg:col-span-3 animate-fade-in-up">
         <Card>
           <CardHeader>
             <CardTitle>Your Complaints</CardTitle>
@@ -125,8 +125,8 @@ export default function ComplaintsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {complaints.map(complaint => (
-                  <TableRow key={complaint.id}>
+                {complaints.map((complaint, index) => (
+                  <TableRow key={complaint.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                     <TableCell>{formatDate(complaint.date)}</TableCell>
                     <TableCell>{complaint.category}</TableCell>
                     <TableCell>
@@ -142,7 +142,7 @@ export default function ComplaintsPage() {
         </Card>
       </div>
 
-      <div className="lg:col-span-2">
+      <div className="lg:col-span-2 animate-fade-in-up animation-delay-200">
         <form onSubmit={handleSubmit}>
           <Card>
             <CardHeader>

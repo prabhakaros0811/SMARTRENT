@@ -76,8 +76,8 @@ export default function PaymentHistoryPage() {
               </TableHeader>
               <TableBody>
                 {rentHistory.length > 0 ? (
-                  rentHistory.map(payment => (
-                    <TableRow key={payment.id}>
+                  rentHistory.map((payment, index) => (
+                    <TableRow key={payment.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                       <TableCell className="font-medium">{payment.month} {payment.year}</TableCell>
                       <TableCell>{formatCurrency(payment.amount)}</TableCell>
                       <TableCell>{formatDate(payment.dueDate)}</TableCell>
@@ -115,8 +115,8 @@ export default function PaymentHistoryPage() {
               </TableHeader>
               <TableBody>
                 {billHistory.length > 0 ? (
-                  billHistory.map(bill => (
-                    <TableRow key={bill.id}>
+                  billHistory.map((bill, index) => (
+                    <TableRow key={bill.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                       <TableCell className="font-medium">{bill.month} {bill.year}</TableCell>
                       <TableCell>{bill.type}</TableCell>
                       <TableCell>{formatCurrency(bill.amount)}</TableCell>

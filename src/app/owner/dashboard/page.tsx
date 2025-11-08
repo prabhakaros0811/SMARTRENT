@@ -96,9 +96,9 @@ export default function OwnerDashboard() {
   const unpaidRents = pendingPayments.length;
 
   return (
-    <div className="grid gap-6 animate-fade-in-up">
+    <div className="grid gap-6">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="animate-fade-in-up">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Properties</CardTitle>
             <Home className="h-4 w-4 text-muted-foreground" />
@@ -107,7 +107,7 @@ export default function OwnerDashboard() {
             <div className="text-2xl font-bold">{totalProperties}</div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="animate-fade-in-up animation-delay-100">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Tenants</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
@@ -116,7 +116,7 @@ export default function OwnerDashboard() {
             <div className="text-2xl font-bold">{totalTenants}</div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="animate-fade-in-up animation-delay-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Unpaid Rents</CardTitle>
             <IndianRupee className="h-4 w-4 text-muted-foreground" />
@@ -125,7 +125,7 @@ export default function OwnerDashboard() {
             <div className="text-2xl font-bold">{unpaidRents}</div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="animate-fade-in-up animation-delay-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending Complaints</CardTitle>
             <ShieldAlert className="h-4 w-4 text-muted-foreground" />
@@ -137,7 +137,7 @@ export default function OwnerDashboard() {
       </div>
 
        {paymentsToConfirm.length > 0 && (
-         <Card>
+         <Card className="animate-fade-in-up animation-delay-400">
             <CardHeader>
                 <CardTitle>Awaiting Payment Confirmation</CardTitle>
                 <CardDescription>Review payments submitted by tenants and confirm their receipt.</CardDescription>
@@ -154,8 +154,8 @@ export default function OwnerDashboard() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paymentsToConfirm.map(payment => (
-                            <TableRow key={payment.id}>
+                        {paymentsToConfirm.map((payment, index) => (
+                            <TableRow key={payment.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                                 <TableCell>{mockTenants.find(t => t.id === payment.tenantId)?.name}</TableCell>
                                 <TableCell>{payment.month} {payment.year}</TableCell>
                                 <TableCell>{formatCurrency(payment.amount)}</TableCell>
@@ -179,7 +179,7 @@ export default function OwnerDashboard() {
       )}
 
       {pendingPayments.length > 0 && (
-         <Card>
+         <Card className="animate-fade-in-up animation-delay-500">
             <CardHeader>
                 <CardTitle>Pending Rent Reminders</CardTitle>
                 <CardDescription>Follow up with tenants who have outstanding payments.</CardDescription>
@@ -197,8 +197,8 @@ export default function OwnerDashboard() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {pendingPayments.map(payment => (
-                            <TableRow key={payment.id}>
+                        {pendingPayments.map((payment, index) => (
+                            <TableRow key={payment.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                                 <TableCell>{mockTenants.find(t => t.id === payment.tenantId)?.name}</TableCell>
                                 <TableCell>{payment.month} {payment.year}</TableCell>
                                 <TableCell>{formatCurrency(payment.amount)}</TableCell>
@@ -222,7 +222,7 @@ export default function OwnerDashboard() {
       )}
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
+        <Card className="animate-fade-in-up animation-delay-600">
           <CardHeader>
             <CardTitle>Rent Overview</CardTitle>
             <CardDescription>Monthly paid vs. pending rent amounts.</CardDescription>
@@ -243,7 +243,7 @@ export default function OwnerDashboard() {
             </ChartContainer>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="animate-fade-in-up animation-delay-700">
           <CardHeader>
             <CardTitle>Recent Complaints</CardTitle>
             <CardDescription>A list of recent complaints from tenants.</CardDescription>
@@ -259,8 +259,8 @@ export default function OwnerDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {complaints.slice(0, 4).map((complaint) => (
-                  <TableRow key={complaint.id}>
+                {complaints.slice(0, 4).map((complaint, index) => (
+                  <TableRow key={complaint.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                     <TableCell className="font-medium">{mockTenants.find(t => t.id === complaint.tenantId)?.name}</TableCell>
                     <TableCell>{complaint.category}</TableCell>
                     <TableCell>{formatDate(complaint.date)}</TableCell>

@@ -97,9 +97,9 @@ export default function TenantDashboard() {
 
   return (
     <>
-    <div className="grid gap-6 lg:grid-cols-3 animate-fade-in-up">
+    <div className="grid gap-6 lg:grid-cols-3">
       <div className="lg:col-span-2">
-        <Card className="overflow-hidden">
+        <Card className="overflow-hidden animate-fade-in-up">
           <div className="relative h-64 w-full">
             <Image
               src={property.imageUrl}
@@ -117,22 +117,22 @@ export default function TenantDashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-            <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
+            <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary animate-fade-in-up animation-delay-200">
                 <IndianRupee className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Rent</span>
                 <span className="font-bold text-lg">{formatCurrency(property.rent)}</span>
             </div>
-             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
+             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary animate-fade-in-up animation-delay-300">
                 <Bed className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Bedrooms</span>
                 <span className="font-bold text-lg">{property.bedrooms}</span>
             </div>
-             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
+             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary animate-fade-in-up animation-delay-400">
                 <Bath className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Bathrooms</span>
                 <span className="font-bold text-lg">{property.bathrooms}</span>
             </div>
-            <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary">
+            <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary animate-fade-in-up animation-delay-500">
                 <FileText className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Area</span>
                 <span className="font-bold text-lg">{property.squareFootage} sqft</span>
@@ -142,7 +142,7 @@ export default function TenantDashboard() {
       </div>
 
       <div className="space-y-6">
-        <Card>
+        <Card className="animate-fade-in-up animation-delay-600">
           <CardHeader>
             <CardTitle>Upcoming Payments</CardTitle>
             <CardDescription>Your latest payment statuses.</CardDescription>
@@ -193,7 +193,7 @@ export default function TenantDashboard() {
           </CardContent>
         </Card>
 
-         <Card>
+         <Card className="animate-fade-in-up animation-delay-700">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <Megaphone className="h-5 w-5 text-primary" />
@@ -202,8 +202,8 @@ export default function TenantDashboard() {
                  <CardDescription>Messages from your property owner.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-                {announcements.length > 0 ? announcements.map(announcement => (
-                    <div key={announcement.id}>
+                {announcements.length > 0 ? announcements.map((announcement, index) => (
+                    <div key={announcement.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                         <p className="text-sm">{announcement.message}</p>
                         <p className="text-xs text-muted-foreground mt-1">{formatDate(announcement.date)}</p>
                     </div>

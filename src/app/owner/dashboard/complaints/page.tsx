@@ -77,10 +77,10 @@ export default function OwnerComplaintsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {complaints.map(complaint => {
+            {complaints.map((complaint, index) => {
                 const tenant = mockTenants.find(t => t.id === complaint.tenantId);
                 return (
-                    <TableRow key={complaint.id}>
+                    <TableRow key={complaint.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                         <TableCell className="font-medium">{tenant?.name}</TableCell>
                         <TableCell>{complaint.propertyId}</TableCell>
                         <TableCell>{formatDate(complaint.date)}</TableCell>

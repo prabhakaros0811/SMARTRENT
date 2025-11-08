@@ -93,7 +93,7 @@ export default function OwnerPropertiesPage() {
   };
 
   const handleSubmit = () => {
-    if (!title || !address || !rent || !bedrooms || !bathrooms || !squareFootage) {
+    if (!title.trim() || !address.trim() || !rent.trim() || !bedrooms.trim() || !bathrooms.trim() || !squareFootage.trim()) {
       toast({
         variant: 'destructive',
         title: 'Error',
@@ -195,10 +195,10 @@ export default function OwnerPropertiesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {properties.map(property => {
+              {properties.map((property, index) => {
                 const tenant = property.tenantId ? getTenantForProperty(property.id) : null;
                 return (
-                  <TableRow key={property.id}>
+                  <TableRow key={property.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt={property.title}
@@ -305,7 +305,7 @@ export default function OwnerPropertiesPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsFormOpen(false)}>Cancel</Button>
-            <Button onClick={handleSubmit}>Save Changes</Button>
+            <Button onClick={handleSubmit} disabled={!title.trim() || !address.trim() || !rent.trim() || !bedrooms.trim() || !bathrooms.trim() || !squareFootage.trim()}>Save Changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

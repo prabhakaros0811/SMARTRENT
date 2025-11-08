@@ -95,7 +95,7 @@ export default {
         'fade-in-up': {
           from: {
             opacity: '0',
-            transform: 'translateY(10px)',
+            transform: 'translateY(20px)',
           },
           to: {
             opacity: '1',
@@ -107,9 +107,33 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in': 'fade-in 0.5s ease-out',
-        'fade-in-up': 'fade-in-up 0.5s ease-out',
+        'fade-in-up': 'fade-in-up 0.7s ease-out forwards',
+      },
+      animationDelay: {
+        '100': '100ms',
+        '200': '200ms',
+        '300': '300ms',
+        '400': '400ms',
+        '500': '500ms',
+        '600': '600ms',
+        '700': '700ms',
+        '800': '800ms',
+        '900': '900ms',
+        '1000': '1000ms',
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    function ({ addUtilities, theme }: { addUtilities: any, theme: any }) {
+      const newUtilities: { [key: string]: any } = {};
+      const animationDelay = theme('animationDelay');
+      Object.entries(animationDelay).forEach(([key, value]) => {
+        newUtilities[`.animation-delay-${key}`] = {
+          'animation-delay': value,
+        };
+      });
+      addUtilities(newUtilities);
+    }
+  ],
 } satisfies Config;

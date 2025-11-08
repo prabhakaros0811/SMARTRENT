@@ -100,8 +100,8 @@ export default function DocumentsPage() {
    };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-5 animate-fade-in-up">
-      <Card className="lg:col-span-3">
+    <div className="grid gap-6 lg:grid-cols-5">
+      <Card className="lg:col-span-3 animate-fade-in-up">
         <CardHeader>
           <CardTitle>Your Documents</CardTitle>
           <CardDescription>
@@ -119,8 +119,8 @@ export default function DocumentsPage() {
             </TableHeader>
             <TableBody>
               {documents.length > 0 ? (
-                documents.map(doc => (
-                  <TableRow key={doc.id}>
+                documents.map((doc, index) => (
+                  <TableRow key={doc.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                     <TableCell className="font-medium flex items-center gap-2">
                       <File className="h-4 w-4 text-muted-foreground" />
                       {doc.name}
@@ -145,7 +145,7 @@ export default function DocumentsPage() {
         </CardContent>
       </Card>
 
-      <div className="lg:col-span-2">
+      <div className="lg:col-span-2 animate-fade-in-up animation-delay-200">
         <Card>
           <CardHeader>
             <CardTitle>Upload New Document</CardTitle>

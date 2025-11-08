@@ -62,8 +62,8 @@ export default function AnnouncementsPage() {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2 animate-fade-in-up">
-      <Card>
+    <div className="grid gap-6 lg:grid-cols-2">
+      <Card className="animate-fade-in-up">
         <CardHeader>
           <div className="flex items-start gap-4">
             <div className="p-3 bg-primary/10 rounded-full">
@@ -86,7 +86,7 @@ export default function AnnouncementsPage() {
           />
         </CardContent>
         <CardFooter>
-          <Button onClick={handleSendAnnouncement} className="w-full" disabled={isSending}>
+          <Button onClick={handleSendAnnouncement} className="w-full" disabled={isSending || !newAnnouncement.trim()}>
             {isSending ? (
               <LoaderCircle className="mr-2 animate-spin" />
             ) : (
@@ -97,7 +97,7 @@ export default function AnnouncementsPage() {
         </CardFooter>
       </Card>
       
-      <Card>
+      <Card className="animate-fade-in-up animation-delay-200">
         <CardHeader>
           <CardTitle>Sent Announcements</CardTitle>
           <CardDescription>
@@ -113,8 +113,8 @@ export default function AnnouncementsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {announcements.map((announcement) => (
-                <TableRow key={announcement.id}>
+              {announcements.map((announcement, index) => (
+                <TableRow key={announcement.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                   <TableCell className="whitespace-nowrap w-[120px] align-top">
                     {formatDate(announcement.date)}
                   </TableCell>

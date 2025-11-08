@@ -55,7 +55,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background">
       <main className="flex-1 w-full">
-        <section className="relative flex flex-col items-center justify-center text-center py-20 lg:py-32">
+        <section className="relative flex flex-col items-center justify-center text-center py-20 lg:py-32 overflow-hidden">
           <div className="absolute inset-0 z-0">
             {heroImage && (
               <Image
@@ -70,18 +70,18 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
           </div>
 
-          <div className="relative z-10 flex flex-col items-center text-center p-4 animate-fade-in-up">
-            <Icons.logo className="h-16 w-16 mb-4 text-primary" />
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl font-headline">
+          <div className="relative z-10 flex flex-col items-center text-center p-4">
+            <Icons.logo className="h-16 w-16 mb-4 text-primary animate-fade-in-up" />
+            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl font-headline animate-fade-in-up animation-delay-200">
               Welcome to RentEase
             </h1>
-            <p className="mt-6 text-lg leading-8 text-muted-foreground max-w-2xl">
+            <p className="mt-6 text-lg leading-8 text-muted-foreground max-w-2xl animate-fade-in-up animation-delay-400">
               The all-in-one solution for managing your properties. Choose your role to get started.
             </p>
           </div>
 
-          <div className="relative z-10 mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 max-w-4xl w-full p-4 animate-fade-in-up animation-delay-300">
-            <Card className="transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+          <div className="relative z-10 mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 max-w-4xl w-full p-4">
+            <Card className="transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 animate-fade-in-up animation-delay-600">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-2xl font-headline">
                   <Icons.owner className="h-6 w-6" />
@@ -100,7 +100,7 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            <Card className="transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+            <Card className="transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20 animate-fade-in-up animation-delay-800">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-2xl font-headline">
                   <Icons.tenant className="h-6 w-6" />
@@ -136,8 +136,8 @@ export default function Home() {
               {features.map((feature, index) => (
                 <div
                   key={feature.title}
-                  className={`transition-all duration-500 ease-out ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
+                  className={`transition-all duration-700 ease-out ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                  style={{ transitionDelay: `${index * 150}ms` }}
                 >
                   <Card className="h-full text-center group transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl">
                     <CardHeader className="items-center">
