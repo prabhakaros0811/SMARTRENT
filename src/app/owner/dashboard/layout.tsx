@@ -47,18 +47,18 @@ export default function OwnerDashboardLayout({
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <Link href="/owner/dashboard/tenants" passHref>
-                <SidebarMenuButton tooltip="Tenants">
-                  <Users />
-                  Tenants
-                </SidebarMenuButton>
-              </Link>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
               <Link href="/owner/dashboard/properties" passHref>
                 <SidebarMenuButton tooltip="Properties">
                   <FileText />
                   Properties
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link href="/owner/dashboard/tenants" passHref>
+                <SidebarMenuButton tooltip="Tenants">
+                  <Users />
+                  Tenants
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
@@ -75,6 +75,14 @@ export default function OwnerDashboardLayout({
                 <SidebarMenuButton tooltip="Announcements">
                   <Megaphone />
                   Announcements
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link href="/owner/dashboard/rent-prediction" passHref>
+                <SidebarMenuButton tooltip="AI Rent Predictor">
+                  <Lightbulb />
+                  AI Rent Predictor
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

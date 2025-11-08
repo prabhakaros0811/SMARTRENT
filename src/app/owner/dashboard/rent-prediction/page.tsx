@@ -10,11 +10,11 @@ import { Lightbulb } from "lucide-react";
 
 export default function RentPredictionPage() {
   return (
-    <div className="max-w-2xl mx-auto animate-fade-in-up">
-      <Card className="shadow-lg">
+    <div className="max-w-3xl mx-auto animate-fade-in-up">
+      <Card>
         <CardHeader>
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-primary/10 rounded-full">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-primary/10 rounded-full border">
               <Lightbulb className="h-6 w-6 text-amber-500" />
             </div>
             <div>
@@ -22,7 +22,7 @@ export default function RentPredictionPage() {
                 AI Rent Predictor
               </CardTitle>
               <CardDescription>
-                Get a competitive market rental rate for your property using AI.
+                Leverage our AI-powered tool to get a competitive market rental rate for your property. Just fill in the details below.
               </CardDescription>
             </div>
           </div>

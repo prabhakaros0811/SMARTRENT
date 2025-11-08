@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Building2, Users, IndianRupee, MessageCircleWarning, BellRing, Bot, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Building2, Users, IndianRupee, Bot, MessageCircleWarning, BellRing } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -13,33 +13,33 @@ import { useInView } from 'react-intersection-observer';
 const features = [
   {
     icon: <Building2 className="w-8 h-8 text-primary" />,
-    title: 'Property Management',
-    description: 'Easily add, edit, and manage all your properties from a centralized dashboard.',
+    title: 'Effortless Property Management',
+    description: 'Easily add, edit, and manage all your properties from a centralized, elegant dashboard.',
   },
   {
-    icon: <Users className="w-8 h-8 text-accent" />,
-    title: 'Tenant Management',
-    description: 'Onboard new tenants, track assignments, and manage tenant information seamlessly.',
+    icon: <Users className="w-8 h-8 text-primary" />,
+    title: 'Seamless Tenant Onboarding',
+    description: 'Onboard new tenants, track assignments, and manage tenant information without hassle.',
   },
   {
-    icon: <IndianRupee className="w-8 h-8 text-green-500" />,
-    title: 'Rent Tracking',
-    description: 'Request rent payments, confirm receipts, and send reminders for overdue payments.',
+    icon: <IndianRupee className="w-8 h-8 text-primary" />,
+    title: 'Automated Rent Tracking',
+    description: 'Request rent payments, confirm receipts, and send automated reminders for overdue payments.',
   },
    {
-    icon: <Bot className="w-8 h-8 text-purple-500" />,
-    title: 'AI Rent Predictor',
-    description: 'Leverage AI to get competitive rental rate predictions for your properties.',
+    icon: <Bot className="w-8 h-8 text-primary" />,
+    title: 'AI-Powered Rent Insights',
+    description: 'Leverage AI to get competitive rental rate predictions and stay ahead of the market.',
   },
   {
-    icon: <MessageCircleWarning className="w-8 h-8 text-red-500" />,
-    title: 'Complaint System',
-    description: 'Tenants can submit complaints, and owners can track and resolve them efficiently.',
+    icon: <MessageCircleWarning className="w-8 h-8 text-primary" />,
+    title: 'Integrated Complaint System',
+    description: 'Tenants can submit complaints with ease, and owners can track and resolve them efficiently.',
   },
   {
-    icon: <BellRing className="w-8 h-8 text-indigo-500" />,
-    title: 'Announcements',
-    description: 'Broadcast important messages and updates to all your tenants at once.',
+    icon: <BellRing className="w-8 h-8 text-primary" />,
+    title: 'Instant Announcements',
+    description: 'Broadcast important messages and updates to all your tenants at once with a single click.',
   },
 ];
 
@@ -53,9 +53,9 @@ export default function Home() {
 
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+    <div className="flex min-h-dvh flex-col bg-background">
       <main className="flex-1 w-full">
-        <section className="relative flex flex-col items-center justify-center text-center py-20 lg:py-32 overflow-hidden">
+        <section className="relative flex flex-col items-center justify-center text-center py-24 lg:py-40 overflow-hidden">
           <div className="absolute inset-0 z-0">
             {heroImage && (
               <Image
@@ -63,57 +63,60 @@ export default function Home() {
                 alt={heroImage.description}
                 data-ai-hint={heroImage.imageHint}
                 fill
-                className="object-cover opacity-10"
+                className="object-cover"
                 priority
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
           </div>
 
           <div className="relative z-10 flex flex-col items-center text-center p-4">
-            <Icons.logo className="h-16 w-16 mb-4 text-primary animate-fade-in-up" />
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl font-headline animate-fade-in-up animation-delay-200">
-              Welcome to RentEase
+            <div className="p-3 bg-primary/20 border border-primary/30 rounded-full mb-4 animate-fade-in-up">
+              <Icons.logo className="h-10 w-10 text-primary" />
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl font-headline animate-fade-in-up animation-delay-200">
+              The Future of Rental Management is Here
             </h1>
-            <p className="mt-6 text-lg leading-8 text-muted-foreground max-w-2xl animate-fade-in-up animation-delay-400">
-              The all-in-one solution for managing your properties. Choose your role to get started.
+            <p className="mt-6 text-lg leading-8 text-gray-300 max-w-2xl animate-fade-in-up animation-delay-400">
+              RentEase provides an elegant, all-in-one solution for property owners and tenants. Streamline your operations and enhance your rental experience.
             </p>
           </div>
 
           <div className="relative z-10 mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 max-w-4xl w-full p-4">
-            <Card className="transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 animate-fade-in-up animation-delay-600">
+            <Card className="bg-card/70 backdrop-blur-sm transform transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 animate-fade-in-up animation-delay-600">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-2xl font-headline">
-                  <Icons.owner className="h-6 w-6" />
-                  Property Owner
+                <CardTitle className="flex items-center gap-3 text-2xl font-headline">
+                  <Icons.owner className="h-7 w-7" />
+                  For Property Owners
                 </CardTitle>
                 <CardDescription>
-                  Manage your properties, tenants, and finances with ease.
+                  Manage your properties, tenants, and finances with unparalleled ease and sophistication.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Link href="/owner/login" className="w-full">
-                  <Button className="w-full">
-                    Owner Login <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button className="w-full text-lg py-6">
+                    Owner Portal <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
               </CardContent>
             </Card>
 
-            <Card className="transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20 animate-fade-in-up animation-delay-800">
+            <Card className="bg-card/70 backdrop-blur-sm transform transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20 animate-fade-in-up animation-delay-800">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-2xl font-headline">
-                  <Icons.tenant className="h-6 w-6" />
-                  Tenant
+                <CardTitle className="flex items-center gap-3 text-2xl font-headline">
+                  <Icons.tenant className="h-7 w-7" />
+                  For Tenants
                 </CardTitle>
                 <CardDescription>
-                  Access your rental details, history, and support.
+                  Access your rental details, make payments, and communicate with your owner seamlessly.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Link href="/tenant/login" className="w-full">
-                  <Button className="w-full" variant="accent">
-                    Tenant Login <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button className="w-full text-lg py-6" variant="accent">
+                    Tenant Portal <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
               </CardContent>
@@ -121,14 +124,14 @@ export default function Home() {
           </div>
         </section>
 
-        <section ref={ref} className="py-20 lg:py-24 bg-secondary/50">
+        <section ref={ref} className="py-20 lg:py-24 bg-secondary/30">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl font-headline">
-                Features at a Glance
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-headline">
+                Designed for Excellence
               </h2>
-              <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-                Everything you need to streamline your rental management experience.
+              <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
+                RentEase blends powerful functionality with an elegant interface, turning property management into an engaging and effortless experience.
               </p>
             </div>
 
@@ -139,16 +142,16 @@ export default function Home() {
                   className={`transition-all duration-700 ease-out ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                   style={{ transitionDelay: `${index * 150}ms` }}
                 >
-                  <Card className="h-full text-center group transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl">
-                    <CardHeader className="items-center">
-                      <div className="p-4 bg-primary/10 rounded-full mb-4 transition-transform duration-300 group-hover:scale-110">
+                  <Card className="h-full text-left group transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl bg-card/50 backdrop-blur-sm border-border/50">
+                    <CardHeader className="flex flex-row items-start gap-4">
+                       <div className="p-3 bg-secondary rounded-lg mt-1">
                         {feature.icon}
                       </div>
-                      <CardTitle>{feature.title}</CardTitle>
+                      <div>
+                        <CardTitle className='text-lg'>{feature.title}</CardTitle>
+                         <p className="text-muted-foreground text-sm mt-2">{feature.description}</p>
+                      </div>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">{feature.description}</p>
-                    </CardContent>
                   </Card>
                 </div>
               ))}

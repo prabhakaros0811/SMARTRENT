@@ -90,5 +90,7 @@ body {
   }
   body {
     @apply bg-gradient-to-br from-background to-[hsl(var(--background-to))] text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }

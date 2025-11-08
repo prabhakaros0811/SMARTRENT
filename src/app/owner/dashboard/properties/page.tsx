@@ -8,15 +8,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,7 +19,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,7 +33,7 @@ import { mockProperties, getTenantForProperty } from '@/lib/data';
 import type { Property } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { User, PlusCircle, MoreHorizontal, Trash2, Edit } from 'lucide-react';
+import { User, PlusCircle, MoreHorizontal, Trash2, Edit, IndianRupee, Bed, Bath, UserCircle } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -166,70 +158,64 @@ export default function OwnerPropertiesPage() {
 
   return (
     <>
-      <Card className="animate-fade-in-up">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle>Your Properties</CardTitle>
-            <CardDescription>A list of all properties you own and their status.</CardDescription>
-          </div>
-          <Button size="sm" className="gap-1" onClick={() => handleOpenForm(null)}>
-            <PlusCircle className="h-4 w-4" />
-            Add Property
-          </Button>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="hidden w-[100px] sm:table-cell">
-                  <span className="sr-only">Image</span>
-                </TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Address</TableHead>
-                <TableHead>Rent</TableHead>
-                <TableHead>Tenant</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>
-                  <span className="sr-only">Actions</span>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {properties.map((property, index) => {
-                const tenant = property.tenantId ? getTenantForProperty(property.id) : null;
-                return (
-                  <TableRow key={property.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt={property.title}
-                        className="aspect-square rounded-md object-cover"
-                        height="64"
-                        src={property.imageUrl}
-                        width="64"
-                      />
-                    </TableCell>
-                    <TableCell className="font-medium">{property.title}</TableCell>
-                    <TableCell>{property.address}</TableCell>
-                    <TableCell>{formatCurrency(property.rent)}</TableCell>
-                    <TableCell>
-                      {tenant ? (
-                        <div className="flex items-center gap-2">
-                          <User className="h-4 w-4 text-muted-foreground" />
-                          {tenant.name}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold">Your Properties</h1>
+          <p className="text-muted-foreground">A list of all properties you own and their status.</p>
+        </div>
+        <Button size="sm" className="gap-1" onClick={() => handleOpenForm(null)}>
+          <PlusCircle className="h-4 w-4" />
+          Add Property
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
+          {properties.map((property, index) => {
+            const tenant = property.tenantId ? getTenantForProperty(property.id) : null;
+            return (
+              <Card key={property.id} className="overflow-hidden transition-all duration-300 hover:shadow-lg animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+                <div className="relative">
+                  <Image
+                    alt={property.title}
+                    className="aspect-video w-full object-cover"
+                    height="225"
+                    src={property.imageUrl}
+                    width="400"
+                  />
+                  <Badge variant={tenant ? 'secondary' : 'outline'} className="absolute top-3 right-3">
+                    {tenant ? 'Occupied' : 'Vacant'}
+                  </Badge>
+                </div>
+                <CardHeader>
+                  <CardTitle className="truncate">{property.title}</CardTitle>
+                  <CardDescription className="truncate">{property.address}</CardDescription>
+                </CardHeader>
+                <CardContent className="grid grid-cols-3 gap-2 text-sm">
+                  <div className="flex items-center gap-1 text-muted-foreground">
+                    <Bed className="h-4 w-4"/> 
+                    <span>{property.bedrooms} beds</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-muted-foreground">
+                    <Bath className="h-4 w-4" /> 
+                    <span>{property.bathrooms} baths</span>
+                  </div>
+                   <div className="flex items-center gap-1 text-muted-foreground">
+                    <IndianRupee className="h-4 w-4" /> 
+                    <span>{formatCurrency(property.rent).replace('.00', '')}/mo</span>
+                  </div>
+                </CardContent>
+                 <CardFooter className="flex justify-between items-center bg-secondary/50 py-3 px-6">
+                    {tenant ? (
+                        <div className="flex items-center gap-2 text-sm font-medium">
+                          <UserCircle className="h-5 w-5 text-muted-foreground" />
+                          <span>{tenant.name}</span>
                         </div>
                       ) : (
-                        <span className="text-muted-foreground">Vacant</span>
+                        <span className="text-sm text-muted-foreground">No tenant assigned</span>
                       )}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={tenant ? 'secondary' : 'outline'}>
-                        {tenant ? 'Occupied' : 'Vacant'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
+                    <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button aria-haspopup="true" size="icon" variant="ghost">
+                          <Button aria-haspopup="true" size="icon" variant="ghost" className="h-8 w-8">
                             <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
@@ -246,14 +232,11 @@ export default function OwnerPropertiesPage() {
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                </CardFooter>
+              </Card>
+            );
+          })}
+      </div>
 
       {/* Add/Edit Property Dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
