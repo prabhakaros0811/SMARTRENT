@@ -142,7 +142,7 @@ export default function Home() {
                   className={`transition-all duration-700 ease-out ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                   style={{ transitionDelay: `${index * 150}ms` }}
                 >
-                  <Card className="h-full text-left group transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl bg-card/50 backdrop-blur-sm border-border/50">
+                  <Card className="h-full text-left group transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 bg-card/50 backdrop-blur-sm border-border/50">
                     <CardHeader className="flex flex-row items-start gap-4">
                        <div className="p-3 bg-secondary rounded-lg mt-1">
                         {feature.icon}
