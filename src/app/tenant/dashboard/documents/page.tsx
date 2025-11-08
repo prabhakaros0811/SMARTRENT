@@ -44,6 +44,8 @@ export default function DocumentsPage() {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
+    } else {
+      setSelectedFile(null);
     }
   };
 
@@ -98,7 +100,7 @@ export default function DocumentsPage() {
    };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-5">
+    <div className="grid gap-6 lg:grid-cols-5 animate-fade-in-up">
       <Card className="lg:col-span-3">
         <CardHeader>
           <CardTitle>Your Documents</CardTitle>
@@ -116,20 +118,28 @@ export default function DocumentsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {documents.map(doc => (
-                <TableRow key={doc.id}>
-                  <TableCell className="font-medium flex items-center gap-2">
-                    <File className="h-4 w-4 text-muted-foreground" />
-                    {doc.name}
-                  </TableCell>
-                  <TableCell>{formatDate(doc.uploadDate)}</TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(doc.id)}>
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
+              {documents.length > 0 ? (
+                documents.map(doc => (
+                  <TableRow key={doc.id}>
+                    <TableCell className="font-medium flex items-center gap-2">
+                      <File className="h-4 w-4 text-muted-foreground" />
+                      {doc.name}
+                    </TableCell>
+                    <TableCell>{formatDate(doc.uploadDate)}</TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(doc.id)}>
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={3} className="h-24 text-center">
+                    No documents uploaded.
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </CardContent>

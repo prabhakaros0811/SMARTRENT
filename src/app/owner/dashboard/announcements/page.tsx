@@ -62,7 +62,7 @@ export default function AnnouncementsPage() {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-6 lg:grid-cols-2 animate-fade-in-up">
       <Card>
         <CardHeader>
           <div className="flex items-start gap-4">

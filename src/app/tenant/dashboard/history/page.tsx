@@ -49,7 +49,7 @@ export default function PaymentHistoryPage() {
   }
 
   return (
-    <Card>
+    <Card className="animate-fade-in-up">
       <CardHeader>
         <CardTitle>Payment History</CardTitle>
         <CardDescription>
@@ -75,22 +75,30 @@ export default function PaymentHistoryPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {rentHistory.map(payment => (
-                  <TableRow key={payment.id}>
-                    <TableCell className="font-medium">{payment.month} {payment.year}</TableCell>
-                    <TableCell>{formatCurrency(payment.amount)}</TableCell>
-                    <TableCell>{formatDate(payment.dueDate)}</TableCell>
-                    <TableCell>
-                      <Badge variant={getBadgeVariant(payment.status)}>
-                        {payment.status}
-                      </Badge>
+                {rentHistory.length > 0 ? (
+                  rentHistory.map(payment => (
+                    <TableRow key={payment.id}>
+                      <TableCell className="font-medium">{payment.month} {payment.year}</TableCell>
+                      <TableCell>{formatCurrency(payment.amount)}</TableCell>
+                      <TableCell>{formatDate(payment.dueDate)}</TableCell>
+                      <TableCell>
+                        <Badge variant={getBadgeVariant(payment.status)}>
+                          {payment.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {payment.paymentDate ? formatDate(payment.paymentDate) : 'N/A'}
+                      </TableCell>
+                      <TableCell>{payment.paymentMethod || 'N/A'}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} className="h-24 text-center">
+                      No rent payment history.
                     </TableCell>
-                    <TableCell>
-                      {payment.paymentDate ? formatDate(payment.paymentDate) : 'N/A'}
-                    </TableCell>
-                    <TableCell>{payment.paymentMethod || 'N/A'}</TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </TabsContent>
@@ -106,19 +114,27 @@ export default function PaymentHistoryPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {billHistory.map(bill => (
-                  <TableRow key={bill.id}>
-                    <TableCell className="font-medium">{bill.month} {bill.year}</TableCell>
-                    <TableCell>{bill.type}</TableCell>
-                    <TableCell>{formatCurrency(bill.amount)}</TableCell>
-                    <TableCell>{formatDate(bill.dueDate)}</TableCell>
-                    <TableCell>
-                      <Badge variant={bill.status === 'Paid' ? 'secondary' : 'destructive'}>
-                        {bill.status}
-                      </Badge>
+                {billHistory.length > 0 ? (
+                  billHistory.map(bill => (
+                    <TableRow key={bill.id}>
+                      <TableCell className="font-medium">{bill.month} {bill.year}</TableCell>
+                      <TableCell>{bill.type}</TableCell>
+                      <TableCell>{formatCurrency(bill.amount)}</TableCell>
+                      <TableCell>{formatDate(bill.dueDate)}</TableCell>
+                      <TableCell>
+                        <Badge variant={bill.status === 'Paid' ? 'secondary' : 'destructive'}>
+                          {bill.status}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} className="h-24 text-center">
+                      No bill payment history.
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </TabsContent>

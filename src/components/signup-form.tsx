@@ -35,7 +35,7 @@ export function SignupForm({ userType }: SignupFormProps) {
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-     if (!name || !email || !password) {
+     if (!name.trim() || !email.trim() || !password.trim()) {
       toast({
         variant: 'destructive',
         title: 'Signup Failed',
@@ -87,11 +87,11 @@ export function SignupForm({ userType }: SignupFormProps) {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <Card className="w-full max-w-sm shadow-2xl">
+      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up">
         <form onSubmit={handleSignup}>
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <Icon className="h-10 w-10 text-primary" />
+              <Icon className="h-10 w-10" />
             </div>
             <CardTitle className="text-2xl font-headline">{title}</CardTitle>
             <CardDescription>{description}</CardDescription>

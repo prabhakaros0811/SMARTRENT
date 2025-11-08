@@ -60,7 +60,7 @@ export default function ComplaintsPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!category || !message) {
+    if (!category || !message.trim()) {
       toast({
         variant: 'destructive',
         title: 'Submission Failed',
@@ -106,7 +106,7 @@ export default function ComplaintsPage() {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-5">
+    <div className="grid gap-6 lg:grid-cols-5 animate-fade-in-up">
       <div className="lg:col-span-3">
         <Card>
           <CardHeader>
@@ -170,7 +170,7 @@ export default function ComplaintsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" className="w-full" variant="accent" disabled={isSubmitting}>
+              <Button type="submit" className="w-full" variant="accent" disabled={isSubmitting || !category || !message.trim()}>
                 {isSubmitting ? (
                   <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                 ) : (

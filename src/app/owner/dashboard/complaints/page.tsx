@@ -54,7 +54,7 @@ export default function OwnerComplaintsPage() {
 
 
   return (
-    <Card>
+    <Card className="animate-fade-in-up">
       <CardHeader>
         <CardTitle>Tenant Complaints</CardTitle>
         <CardDescription>

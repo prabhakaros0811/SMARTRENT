@@ -28,14 +28,12 @@ export function LoginForm({ userType }: LoginFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState(
-    userType === 'owner' ? 'owner@emall.com' : ''
-  );
-  const [password, setPassword] = useState(userType === 'owner' ? 'password' : '');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username || !password) {
+    if (!username.trim() || !password.trim()) {
       toast({
         variant: 'destructive',
         title: 'Validation Error',
@@ -84,15 +82,15 @@ export function LoginForm({ userType }: LoginFormProps) {
   const buttonVariant = userType === 'owner' ? 'default' : 'accent';
   const usernameLabel = userType === 'owner' ? 'Email' : 'User ID';
   const usernamePlaceholder =
-    userType === 'owner' ? 'user@example.com' : 'e.g., tenant-12345';
+    userType === 'owner' ? 'user@example.com' : 'e.g., tenant-1';
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <Card className="w-full max-w-sm shadow-2xl">
+      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up">
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <Icon className="h-10 w-10 text-primary" />
+              <Icon className="h-10 w-10" />
             </div>
             <CardTitle className="text-2xl font-headline">{title}</CardTitle>
             <CardDescription>{description}</CardDescription>

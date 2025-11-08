@@ -10,7 +10,7 @@ import { Lightbulb } from "lucide-react";
 
 export default function RentPredictionPage() {
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto animate-fade-in-up">
       <Card className="shadow-lg">
         <CardHeader>
           <div className="flex items-center gap-4">

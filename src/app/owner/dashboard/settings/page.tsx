@@ -9,7 +9,7 @@ import { Bell, Shield } from 'lucide-react';
 
 export default function OwnerSettingsPage() {
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto animate-fade-in-up">
       <Card>
         <CardHeader>
           <CardTitle>Settings</CardTitle>

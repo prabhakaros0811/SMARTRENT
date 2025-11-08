@@ -166,7 +166,7 @@ export default function OwnerPropertiesPage() {
 
   return (
     <>
-      <Card>
+      <Card className="animate-fade-in-up">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle>Your Properties</CardTitle>
