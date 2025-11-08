@@ -8,7 +8,6 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -108,31 +107,32 @@ export default function TenantDashboard() {
               className="object-cover"
               data-ai-hint="apartment interior"
             />
+             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+             <div className="absolute bottom-0 left-0 p-6">
+                <h1 className="text-3xl font-bold text-white font-headline">{property.title}</h1>
+                <p className="text-sm text-white/90 flex items-center gap-2 mt-1">
+                    <Home className="h-4 w-4" />
+                    {property.address}
+                </p>
+             </div>
           </div>
-          <CardHeader>
-            <CardTitle className="text-3xl font-headline">{property.title}</CardTitle>
-            <CardDescription className="flex items-center gap-2">
-              <Home className="h-4 w-4" />
-              {property.address}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-            <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary animate-fade-in-up animation-delay-200">
+          <CardContent className="p-6 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary/50 animate-fade-in-up animation-delay-200">
                 <IndianRupee className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Rent</span>
                 <span className="font-bold text-lg">{formatCurrency(property.rent)}</span>
             </div>
-             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary animate-fade-in-up animation-delay-300">
+             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary/50 animate-fade-in-up animation-delay-300">
                 <Bed className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Bedrooms</span>
                 <span className="font-bold text-lg">{property.bedrooms}</span>
             </div>
-             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary animate-fade-in-up animation-delay-400">
+             <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary/50 animate-fade-in-up animation-delay-400">
                 <Bath className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Bathrooms</span>
                 <span className="font-bold text-lg">{property.bathrooms}</span>
             </div>
-            <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary animate-fade-in-up animation-delay-500">
+            <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-secondary/50 animate-fade-in-up animation-delay-500">
                 <FileText className="h-6 w-6 text-accent mb-1" />
                 <span className="text-sm text-muted-foreground">Area</span>
                 <span className="font-bold text-lg">{property.squareFootage} sqft</span>
@@ -206,6 +206,7 @@ export default function TenantDashboard() {
                     <div key={announcement.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                         <p className="text-sm">{announcement.message}</p>
                         <p className="text-xs text-muted-foreground mt-1">{formatDate(announcement.date)}</p>
+                         {index < announcements.length - 1 && <Separator className="mt-4"/>}
                     </div>
                 )) : (
                     <p className="text-sm text-muted-foreground text-center py-4">No new announcements.</p>

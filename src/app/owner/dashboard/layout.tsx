@@ -94,7 +94,7 @@ export default function OwnerDashboardLayout({
             <SidebarTrigger className="flex items-center gap-2 font-semibold" />
             <UserNav user={mockOwner} />
         </header>
-        <main className="flex-1 p-4 sm:p-6 animate-fade-in">{children}</main>
+        <main className="flex-1 p-4 sm:p-6 bg-secondary/30">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );
