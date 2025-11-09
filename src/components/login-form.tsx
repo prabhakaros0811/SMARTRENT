@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowRight, LoaderCircle } from 'lucide-react';
-import { mockTenants, mockOwner, mockOwners } from '@/lib/data';
+import { mockTenants, mockOwners } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
-
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -18,7 +19,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Icons } from './icons';
-import Link from 'next/link';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 interface LoginFormProps {
   userType: 'owner' | 'tenant';
@@ -30,6 +31,8 @@ export function LoginForm({ userType }: LoginFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  
+  const bgImage = PlaceHolderImages.find(p => p.id === 'hero-1');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,8 +88,19 @@ export function LoginForm({ userType }: LoginFormProps) {
     userType === 'owner' ? 'user@example.com' : 'e.g., tenant-1';
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up">
+    <div className="relative flex min-h-screen items-center justify-center p-4">
+      {bgImage && (
+        <Image
+            src={bgImage.imageUrl}
+            alt={bgImage.description}
+            data-ai-hint={bgImage.imageHint}
+            fill
+            className="object-cover -z-10"
+        />
+      )}
+      <div className="absolute inset-0 bg-black/60 -z-10" />
+
+      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up bg-card/80 backdrop-blur-sm">
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
