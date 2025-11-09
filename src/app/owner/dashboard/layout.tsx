@@ -4,7 +4,6 @@ import {
   Users,
   FileText,
   MessageSquareWarning,
-  Lightbulb,
   Megaphone,
 } from 'lucide-react';
 import {
@@ -75,14 +74,6 @@ export default function OwnerDashboardLayout({
                 <SidebarMenuButton tooltip="Announcements">
                   <Megaphone />
                   Announcements
-                </SidebarMenuButton>
-              </Link>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <Link href="/owner/dashboard/rent-prediction" passHref>
-                <SidebarMenuButton tooltip="AI Rent Predictor">
-                  <Lightbulb />
-                  AI Rent Predictor
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

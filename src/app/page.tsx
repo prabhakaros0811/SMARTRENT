@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Building2, Users, IndianRupee, Bot, MessageCircleWarning, BellRing } from 'lucide-react';
+import { ArrowRight, Building2, Users, IndianRupee, MessageCircleWarning, BellRing } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -28,12 +28,6 @@ const features = [
     title: 'Automated Rent Tracking',
     description: 'Request rent payments, confirm receipts, and send automated reminders for overdue payments.',
     imageId: 'feature-3',
-  },
-   {
-    icon: <Bot className="w-8 h-8 text-primary" />,
-    title: 'AI-Powered Rent Insights',
-    description: 'Leverage AI to get competitive rental rate predictions and stay ahead of the market.',
-    imageId: 'feature-4',
   },
   {
     icon: <MessageCircleWarning className="w-8 h-8 text-primary" />,
