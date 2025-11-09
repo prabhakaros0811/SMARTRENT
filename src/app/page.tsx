@@ -15,31 +15,37 @@ const features = [
     icon: <Building2 className="w-8 h-8 text-primary" />,
     title: 'Effortless Property Management',
     description: 'Easily add, edit, and manage all your properties from a centralized, elegant dashboard.',
+    imageId: 'feature-1',
   },
   {
     icon: <Users className="w-8 h-8 text-primary" />,
     title: 'Seamless Tenant Onboarding',
     description: 'Onboard new tenants, track assignments, and manage tenant information without hassle.',
+    imageId: 'feature-2',
   },
   {
     icon: <IndianRupee className="w-8 h-8 text-primary" />,
     title: 'Automated Rent Tracking',
     description: 'Request rent payments, confirm receipts, and send automated reminders for overdue payments.',
+    imageId: 'feature-3',
   },
    {
     icon: <Bot className="w-8 h-8 text-primary" />,
     title: 'AI-Powered Rent Insights',
     description: 'Leverage AI to get competitive rental rate predictions and stay ahead of the market.',
+    imageId: 'feature-4',
   },
   {
     icon: <MessageCircleWarning className="w-8 h-8 text-primary" />,
     title: 'Integrated Complaint System',
     description: 'Tenants can submit complaints with ease, and owners can track and resolve them efficiently.',
+    imageId: 'feature-5',
   },
   {
     icon: <BellRing className="w-8 h-8 text-primary" />,
     title: 'Instant Announcements',
     description: 'Broadcast important messages and updates to all your tenants at once with a single click.',
+    imageId: 'feature-6',
   },
 ];
 
@@ -136,25 +142,36 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {features.map((feature, index) => (
-                <div
-                  key={feature.title}
-                  className={`transition-all duration-700 ease-out ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                  style={{ transitionDelay: `${index * 150}ms` }}
-                >
-                  <Card className="h-full text-left group transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 bg-card/50 backdrop-blur-sm border-border/50">
-                    <CardHeader className="flex flex-row items-start gap-4">
-                       <div className="p-3 bg-secondary rounded-lg mt-1">
-                        {feature.icon}
-                      </div>
-                      <div>
-                        <CardTitle className='text-lg'>{feature.title}</CardTitle>
-                         <p className="text-muted-foreground text-sm mt-2">{feature.description}</p>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                </div>
-              ))}
+              {features.map((feature, index) => {
+                const featureImage = PlaceHolderImages.find(p => p.id === feature.imageId);
+                return (
+                    <div
+                    key={feature.title}
+                    className={`transition-all duration-700 ease-out ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                    style={{ transitionDelay: `${index * 150}ms` }}
+                    >
+                    <Card className="relative h-full text-left group transform transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-primary/30 bg-card border-border/50 overflow-hidden">
+                        {featureImage && (
+                            <Image
+                                src={featureImage.imageUrl}
+                                alt={feature.title}
+                                data-ai-hint={featureImage.imageHint}
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                        )}
+                        <div className="absolute inset-0 bg-black/60 group-hover:bg-black/70 transition-colors duration-300" />
+                        <div className="relative h-full flex flex-col justify-end p-6">
+                            <div className="p-3 bg-secondary/80 backdrop-blur-sm rounded-lg self-start mb-4">
+                                {feature.icon}
+                            </div>
+                            <CardTitle className='text-lg text-white'>{feature.title}</CardTitle>
+                            <p className="text-white/80 text-sm mt-2">{feature.description}</p>
+                        </div>
+                    </Card>
+                    </div>
+                )
+              })}
             </div>
           </div>
         </section>

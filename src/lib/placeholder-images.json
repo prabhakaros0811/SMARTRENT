@@ -5,6 +5,42 @@
       "description": "A modern and bright living room interior.",
       "imageUrl": "https://images.unsplash.com/photo-1618220179428-22790b461013?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsaXZpbmclMjByb29tfGVufDB8fHx8MTc2MjM1NDMzOXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "living room"
+    },
+    {
+      "id": "feature-1",
+      "description": "A person using a modern dashboard with charts and graphs.",
+      "imageUrl": "https://images.unsplash.com/photo-1759661966728-4a02e3c6ed91?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxkYXNoYm9hcmQlMjBhbmFseXRpY3N8ZW58MHx8fHwxNzYyNjU3MjA2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dashboard analytics"
+    },
+    {
+      "id": "feature-2",
+      "description": "Two people shaking hands, symbolizing a new agreement.",
+      "imageUrl": "https://images.unsplash.com/photo-1578357078586-491adf1aa5ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzaGFraW5nJTIwaGFuZHN8ZW58MHx8fHwxNzYyNjY1MDQ3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "shaking hands"
+    },
+    {
+      "id": "feature-3",
+      "description": "A calculator and coins on a desk, representing finance tracking.",
+      "imageUrl": "https://images.unsplash.com/photo-1728022873385-1b48bbc41ecc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjYWxjdWxhdG9yJTIwbW9uZXl8ZW58MHx8fHwxNzYyNjE0OTY3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "calculator money"
+    },
+    {
+      "id": "feature-4",
+      "description": "A glowing brain icon made of circuits, representing AI.",
+      "imageUrl": "https://images.unsplash.com/photo-1673255745677-e36f618550d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyb2JvdCUyMGJyYWlufGVufDB8fHx8MTc2MjU0NDkyNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "robot brain"
+    },
+    {
+      "id": "feature-5",
+      "description": "A person looking at their phone with a concerned expression.",
+      "imageUrl": "https://images.unsplash.com/photo-1526975631892-96373d047960?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwZXJzb24lMjBwaG9uZXxlbnwwfHx8fDE3NjI2MjgzOTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person phone"
+    },
+    {
+      "id": "feature-6",
+      "description": "A megaphone broadcasting a message.",
+      "imageUrl": "https://images.unsplash.com/photo-1646725357533-20bdc7b7bf27?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtZWdhcGhvbmUlMjBicm9hZGNhc3R8ZW58MHx8fHwxNzYyNjY1MDQ3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "megaphone broadcast"
     }
   ]
 }
