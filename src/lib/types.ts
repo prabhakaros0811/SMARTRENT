@@ -8,7 +8,7 @@ export interface User {
 }
 
 export interface Property {
-  id: string;
+  id?: string;
   ownerId: string;
   title: string;
   address: string;

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import {
   Card,
@@ -29,11 +29,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { mockProperties, getTenantForProperty } from '@/lib/data';
+import {
+  getProperties,
+  addProperty,
+  updateProperty,
+  deleteProperty,
+} from '@/lib/firebase/firestore';
+import { mockTenants } from '@/lib/data';
 import type { Property } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { User, PlusCircle, MoreHorizontal, Trash2, Edit, IndianRupee, Bed, Bath, UserCircle } from 'lucide-react';
+import { User, PlusCircle, MoreHorizontal, Trash2, Edit, IndianRupee, Bed, Bath, UserCircle, LoaderCircle } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,10 +49,13 @@ import {
 
 export default function OwnerPropertiesPage() {
   const { toast } = useToast();
-  const [properties, setProperties] = useState<Property[]>(mockProperties);
+  const [properties, setProperties] = useState<Property[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [ownerId, setOwnerId] = useState<string | null>(null);
+
 
   // Form state
   const [title, setTitle] = useState('');
@@ -56,6 +65,30 @@ export default function OwnerPropertiesPage() {
   const [bedrooms, setBedrooms] = useState('');
   const [bathrooms, setBathrooms] = useState('');
   const [squareFootage, setSquareFootage] = useState('');
+
+  useEffect(() => {
+    const loggedInOwnerId = localStorage.getItem('loggedInOwnerId') || 'owner-1';
+    setOwnerId(loggedInOwnerId);
+
+    const fetchProperties = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedProperties = await getProperties(loggedInOwnerId);
+        setProperties(fetchedProperties);
+      } catch (error) {
+        console.error('Error fetching properties:', error);
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to load properties.',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, [toast]);
 
   const resetForm = () => {
     setTitle('');
@@ -84,8 +117,8 @@ export default function OwnerPropertiesPage() {
     setIsFormOpen(true);
   };
 
-  const handleSubmit = () => {
-    if (!title.trim() || !address.trim() || !rent.trim() || !bedrooms.trim() || !bathrooms.trim() || !squareFootage.trim()) {
+  const handleSubmit = async () => {
+    if (!title.trim() || !address.trim() || !rent.trim() || !bedrooms.trim() || !bathrooms.trim() || !squareFootage.trim() || !ownerId) {
       toast({
         variant: 'destructive',
         title: 'Error',
@@ -102,26 +135,27 @@ export default function OwnerPropertiesPage() {
       bedrooms: parseInt(bedrooms, 10),
       bathrooms: parseInt(bathrooms, 10),
       squareFootage: parseInt(squareFootage, 10),
-      imageUrl: `https://picsum.photos/seed/${Math.random()}/800/600`, // random image
-      ownerId: 'owner-1',
+      imageUrl: `https://picsum.photos/seed/${Math.random()}/800/600`,
+      ownerId: ownerId,
     };
 
-    if (selectedProperty) {
-      // Editing existing property
-      const updatedProperty = { ...selectedProperty, ...newPropertyData };
-      const propertyIndex = mockProperties.findIndex(p => p.id === selectedProperty.id);
-      if (propertyIndex !== -1) {
-        mockProperties[propertyIndex] = updatedProperty;
-        setProperties([...mockProperties]);
+    try {
+      if (selectedProperty) {
+        // Editing existing property
+        await updateProperty(selectedProperty.id!, newPropertyData);
+        setProperties(properties.map(p => p.id === selectedProperty.id ? { ...selectedProperty, ...newPropertyData } : p));
         toast({ title: 'Success', description: 'Property updated successfully.' });
+      } else {
+        // Adding new property
+        const addedProperty = await addProperty(newPropertyData);
+        setProperties([addedProperty, ...properties]);
+        toast({ title: 'Success', description: 'Property added successfully.' });
       }
-    } else {
-      // Adding new property
-      const newProperty = { ...newPropertyData, id: `prop-${Date.now()}` };
-      mockProperties.unshift(newProperty);
-      setProperties([...mockProperties]);
-      toast({ title: 'Success', description: 'Property added successfully.' });
+    } catch (error) {
+        console.error("Failed to save property: ", error);
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to save property.' });
     }
+
 
     setIsFormOpen(false);
     resetForm();
@@ -132,8 +166,8 @@ export default function OwnerPropertiesPage() {
     setIsDeleteDialogOpen(true);
   };
 
-  const handleRemoveProperty = () => {
-    if (!selectedProperty) return;
+  const handleRemoveProperty = async () => {
+    if (!selectedProperty || !selectedProperty.id) return;
 
     if (selectedProperty.tenantId) {
         toast({
@@ -145,16 +179,22 @@ export default function OwnerPropertiesPage() {
         return;
     }
 
-    const propertyIndex = mockProperties.findIndex(p => p.id === selectedProperty.id);
-    if (propertyIndex !== -1) {
-      mockProperties.splice(propertyIndex, 1);
-      setProperties([...mockProperties]);
-      toast({ title: 'Success', description: 'Property removed successfully.' });
+    try {
+        await deleteProperty(selectedProperty.id);
+        setProperties(properties.filter(p => p.id !== selectedProperty.id));
+        toast({ title: 'Success', description: 'Property removed successfully.' });
+    } catch(error) {
+        console.error("Failed to delete property: ", error);
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete property.' });
     }
     
     setIsDeleteDialogOpen(false);
     setSelectedProperty(null);
   };
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-full"><LoaderCircle className="h-8 w-8 animate-spin" /></div>;
+  }
 
   return (
     <>
@@ -171,7 +211,7 @@ export default function OwnerPropertiesPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
           {properties.map((property, index) => {
-            const tenant = property.tenantId ? getTenantForProperty(property.id) : null;
+            const tenant = property.tenantId ? mockTenants.find(t => t.propertyId === property.id) : null;
             return (
               <Card key={property.id} className="overflow-hidden transition-all duration-300 hover:shadow-lg animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                 <div className="relative">
