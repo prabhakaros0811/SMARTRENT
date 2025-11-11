@@ -89,7 +89,7 @@ export function LoginForm({ userType }: LoginFormProps) {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center p-4">
-      {bgImage && (
+       {bgImage && (
         <Image
             src={bgImage.imageUrl}
             alt={bgImage.description}
@@ -100,7 +100,7 @@ export function LoginForm({ userType }: LoginFormProps) {
       )}
       <div className="absolute inset-0 bg-black/60 -z-10" />
 
-      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up bg-card/80 backdrop-blur-sm">
+      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up bg-card/80">
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
