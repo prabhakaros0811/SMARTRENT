@@ -146,7 +146,7 @@ export default function OwnerTenantsPage() {
         setIsDocsDialogOpen(true);
     };
 
-g    const getTenantDocuments = () => {
+    const getTenantDocuments = () => {
         if (!selectedTenant) return [];
         return mockDocuments.filter(doc => doc.tenantId === selectedTenant.id);
     };
@@ -409,3 +409,6 @@ g    const getTenantDocuments = () => {
     </>
   );
 }
+
+    
+    
