@@ -2,7 +2,7 @@
 'use server';
 
 import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { db } from '@/firebase/config';
 import type { Property } from '@/lib/types';
 
 const PROPERTIES_COLLECTION = 'properties';

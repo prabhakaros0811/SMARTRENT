@@ -34,7 +34,7 @@ import {
   addProperty,
   updateProperty,
   deleteProperty,
-} from '@/lib/firebase/firestore';
+} from '@/firebase/firestore';
 import { mockTenants } from '@/lib/data';
 import type { Property } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
